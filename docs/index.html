@@ -39,11 +39,6 @@
                     <th scope="row">RIGHT</th>
                     <td>
                         <select name="db" id="db">
-                            <option value="none"></option>
-                            <option value="-10dB">-10dB</option>
-                            <option value="-5dB">-5dB</option>
-                            <option value="0dB">0dB</option>
-                            <option value="5dB">5dB</option>
                         </select>
                     </td>
                     <td></td>
@@ -74,4 +69,12 @@
             </table>
         </div>
     </body>
+    <script>
+        let db = document.getElementById("db");
+        for (let i = -10; i <= 120; i=i+5){
+            let option = document.createElement("option");
+            option.innerHTML = i + "dB";
+            db.appendChild(option);
+        }
+    </script>
     </html>
