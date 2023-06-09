@@ -93,9 +93,9 @@
         for ( var j = 1; j <= 11; j++){
             let id = document.getElementById("db" + j);
             let none = document.createElement("option");
-            none.innerHTML = "";
+            none.innerHTML = "-";
             id.appendChild(none);
-            
+
             for (let i = -10; i <= 120; i=i+5){
                 let option = document.createElement("option");
                 option.innerHTML = i + "dB";
