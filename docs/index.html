@@ -38,19 +38,38 @@
                 <tr>
                     <th scope="row">RIGHT</th>
                     <td>
-                        <select name="db" id="db">
-                        </select>
+                        <select name="db1" id="db1"></select>
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <select name="db2" id="db2"></select>
+                    </td>
+                    <td>
+                        <select name="db3" id="db3"></select>
+                    </td>
+                    <td>
+                        <select name="db4" id="db4"></select>
+                    </td>
+                    <td>
+                        <select name="db5" id="db5"></select>
+                    </td>
+                    <td>
+                        <select name="db6" id="db6"></select>
+                    </td>
+                    <td>
+                        <select name="db7" id="db7"></select>
+                    </td>
+                    <td>
+                        <select name="db8" id="db8"></select>
+                    </td>
+                    <td>
+                        <select name="db9" id="db9"></select>
+                    </td>
+                    <td>
+                        <select name="db10" id="db10"></select>
+                    </td>
+                    <td>
+                        <select name="db11" id="db11"></select>
+                    </td>
                 </tr>
                 <tr>
                     <th scope="row">LEFT</th>
@@ -70,11 +89,16 @@
         </div>
     </body>
     <script>
-        let db = document.getElementById("db");
-        for (let i = -10; i <= 120; i=i+5){
+
+        for ( var j = 1; j <= 11; j++){
+            let id = document.getElementById("db" + j);
+            
+            for (let i = -10; i <= 120; i=i+5){
             let option = document.createElement("option");
             option.innerHTML = i + "dB";
-            db.appendChild(option);
+            id.appendChild(option);
+            }
+            
         }
     </script>
     </html>
