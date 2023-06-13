@@ -38,83 +38,84 @@
                 <tr>
                     <th scope="row">RIGHT</th>
                     <td>
-                        <select name="db1" id="db1"></select>
+                        <select name="db1" id="db1" ></select>
                     </td>
                     <td>
-                        <select name="db2" id="db2"></select>
+                        <select name="db2" id="db2" ></select>
                     </td>
                     <td>
-                        <select name="db3" id="db3"></select>
+                        <select name="db3" id="db3" ></select>
                     </td>
                     <td>
-                        <select name="db4" id="db4"></select>
+                        <select name="db4" id="db4" ></select>
                     </td>
                     <td>
-                        <select name="db5" id="db5"></select>
+                        <select name="db5" id="db5" ></select>
                     </td>
                     <td>
-                        <select name="db6" id="db6"></select>
+                        <select name="db6" id="db6" ></select>
                     </td>
                     <td>
-                        <select name="db7" id="db7"></select>
+                        <select name="db7" id="db7" ></select>
                     </td>
                     <td>
-                        <select name="db8" id="db8"></select>
+                        <select name="db8" id="db8" ></select>
                     </td>
                     <td>
-                        <select name="db9" id="db9"></select>
+                        <select name="db9" id="db9" ></select>
                     </td>
                     <td>
-                        <select name="db10" id="db10"></select>
+                        <select name="db10" id="db10" ></select>
                     </td>
                     <td>
-                        <select name="db11" id="db11"></select>
+                        <select name="db11" id="db11" ></select>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">LEFT</th>
                     <td>
-                        <select name="db12" id="db12"></select>
+                        <select name="db12" id="db12" ></select>
                     </td>
                     <td>
-                        <select name="db13" id="db13"></select>
+                        <select name="db13" id="db13" ></select>
                     </td>
                     <td>
-                        <select name="db14" id="db14"></select>
+                        <select name="db14" id="db14" ></select>
                     </td>
                     <td>
-                        <select name="db15" id="db15"></select>
+                        <select name="db15" id="db15" ></select>
                     </td>
                     <td>
-                        <select name="db16" id="db16"></select>
+                        <select name="db16" id="db16" ></select>
                     </td>
                     <td>
-                        <select name="db17" id="db17"></select>
+                        <select name="db17" id="db17" ></select>
                     </td>
                     <td>
-                        <select name="db18" id="db18"></select>
+                        <select name="db18" id="db18" ></select>
                     </td>
                     <td>
-                        <select name="db19" id="db19"></select>
+                        <select name="db19" id="db19" ></select>
                     </td>
                     <td>
-                        <select name="db20" id="db20"></select>
+                        <select name="db20" id="db20" ></select>
                     </td>
                     <td>
-                        <select name="db21" id="db21"></select>
+                        <select name="db21" id="db21" ></select>
                     </td>
                     <td>
-                        <select name="db22" id="db22"></select>
+                        <select name="db22" id="db22" ></select>
                     </td>
                 </tr>
             </table>
-            <button id="updateBtn"> UPDATE</button>
+            <!-- updateBtn -->
+            <input type="button" value="Update" id="updateBtn" />
         </div>
 
     </body>
     <script>
-
-        for ( var j = 1; j <= 22; j++){
+        //dB
+        for ( let j = 1; j <= 22; j++){
             let id = document.getElementById("db" + j);
             let none = document.createElement("option");
             none.innerHTML = "-";
@@ -122,20 +123,33 @@
 
             for (let i = -10; i <= 120; i=i+5){
                 let option = document.createElement("option");
-                option.innerHTML = i + "dB";
+                // option.innerHTML = i + "dB";
+                option.innerHTML = i;
                 id.appendChild(option);
             }   
         }
+        //get selected dB
         function btnClick(){
-            let selectedOption = selectedDb.selectedOptions;
 
-          console.log(selectedOption);
-          
+            let rightEarData = [];
+            let leftEarData = [];
+
+            for(let j = 1; j <=11; j++){
+                let rightEarInputs = document.getElementById("db"+ j);
+                let idx = rightEarInputs.selectedIndex; 
+                rightEarData.push(rightEarInputs[idx].text);
+            }
+
+            for(let j = 12; j <=22; j++){
+                let leftEarInputs = document.getElementById("db"+ j);
+                let idx = leftEarInputs.selectedIndex; 
+                leftEarData.push(leftEarInputs[idx].text);
+                }
+                console.log(rightEarData);
+                console.log(leftEarData);                         
         }
-        let selectedDb = document.getElementById("db1");
         var updateBtn = document.getElementById("updateBtn");
         updateBtn.addEventListener("click", btnClick);
-
 
 
     </script>
