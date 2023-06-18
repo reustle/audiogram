@@ -116,7 +116,7 @@
         
         </div>
         <div>
-            <canvas id="chart"></canvas>
+            <canvas id="chart" width="300" height="400"></canvas>
         </div>
 
     </body>
@@ -138,23 +138,7 @@
         }
         //get selected dB
         function btnClick(){
-
-            let rightEarData = [];
-            let leftEarData = [];
-
-            for(let j = 1; j <=11; j++){
-                let rightEarInputs = document.getElementById("db"+ j);
-                let idx = rightEarInputs.selectedIndex; 
-                rightEarData.push(rightEarInputs[idx].text);
-            }
-
-            for(let j = 12; j <=22; j++){
-                let leftEarInputs = document.getElementById("db"+ j);
-                let idx = leftEarInputs.selectedIndex; 
-                leftEarData.push(leftEarInputs[idx].text);
-                }
-                console.log(rightEarData);
-                console.log(leftEarData);                         
+            updateChart();
         }
         var updateBtn = document.getElementById("updateBtn");
         updateBtn.addEventListener("click", btnClick);
@@ -164,19 +148,29 @@
 
         var data = {
             labels: ["125", "250", "500", "750", "1000", "1500", "2000", "3000", "4000", "6000","8000"],
-            datasets: [{
-                label: 'Audiogram',
+            datasets: [
+                {
+                label: 'Right',
                 data: [],
                 borderColor: 'rgba(255, 100, 100, 1)'
-            }]
+                },
+                {
+                label: 'Left',
+                data: [],
+                borderColor: 'rgba(15, 10, 222, 1)'
+                }
+            ]
         };
 
         var options = {};
 
-        var ex_chart = new Chart(ctx, {
+        var audiogramChart = new Chart(ctx, {
             type: 'line',
             data: data,
             options: {
+                layout: {
+                    padding: 50
+                },
                scales: {
                     x: {
                         title:{
@@ -202,6 +196,26 @@
             }
         });
         
+        function updateChart(){
+            let rightEarData = [];
+            let leftEarData = [];
+
+            for(let j = 1; j <=11; j++){
+                let rightEarInputs = document.getElementById("db"+ j);
+                let idx = rightEarInputs.selectedIndex; 
+                rightEarData.push(rightEarInputs[idx].text);
+            }
+
+            for(let j = 12; j <=22; j++){
+                let leftEarInputs = document.getElementById("db"+ j);
+                let idx = leftEarInputs.selectedIndex; 
+                leftEarData.push(leftEarInputs[idx].text);
+                }
+
+                audiogramChart.data.datasets[0].data = rightEarData;
+                audiogramChart.data.datasets[1].data = leftEarData;
+                audiogramChart.update();
+        }
 
 
     </script>
