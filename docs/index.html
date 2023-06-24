@@ -115,8 +115,8 @@
             <input type="button" value="Update" id="updateBtn" />
         
         </div>
-        <div class="chart-container">
-            <canvas id="chart" width="300" height="400" ></canvas>
+        <div class="chart-container" >
+            <canvas id="chart" width="600px" height="600px"></canvas>
         </div>
 
     </body>
@@ -177,6 +177,7 @@
             type: 'line',
             data: data,
             options: {
+                responsive: false,
                 layout: {
                     padding: 50
                 },
@@ -198,6 +199,7 @@
                         max: 120,
                         ticks: {
                             stepSize: 10,
+                            autoSkip: false
                         }
                     },
                 }
