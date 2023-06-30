@@ -1,25 +1,57 @@
-    //dB
+let audiogramChart;
+
+function init() {
+    // Add dB options to each dropdown
+
+    // Load the data from localStroage (if it is available)
+    let audiogramData = loadAudiogramData();
+    console.log(audiogramData);
+
     for (let j = 1; j <= 22; j++) {
-        let id = document.getElementById("db" + j);
+        // For each frequency <select> dropdown
+
+        let dbSelector = document.getElementById("db" + j);
         let none = document.createElement("option");
         none.innerHTML = "-";
-        id.appendChild(none);
+        dbSelector.appendChild(none);
 
+        // Make an <option> element for each dB level
         for (let i = -10; i <= 120; i = i + 5) {
             let option = document.createElement("option");
             // option.innerHTML = i + "dB";
             option.innerHTML = i;
-            id.appendChild(option);
+            dbSelector.appendChild(option);
         }
-    }
-    //get selected dB
-    function btnClick() {
-        updateChart();
-    }
-    var updateBtn = document.getElementById("updateBtn");
-    updateBtn.addEventListener("click", btnClick);
 
-    //Chart
+        // If there is a dB value for this ear + this frequency in localstorage,
+        // we should set this dbSelector.value as that value
+        // TODO HERE
+        console.log('Lets look for ', j)
+        if(audiogramData && audiogramData.right){
+            let counter = j - 1;
+            let foundRightDbValue = audiogramData.right[counter];
+            // let foundLeftDbValue = audiogramData.left[counter];
+            
+            if(counter > 11) {
+                counter -= 12;
+                let foundLeftDbValue = audiogramData.left[counter];
+                if(foundLeftDbValue){
+                    
+                    console.log('We found ', foundLeftDbValue)
+                    dbSelector.value = foundLeftDbValue;
+                }
+            }            
+            if(foundRightDbValue){
+                console.log('We found ', foundRightDbValue)
+                dbSelector.value = foundRightDbValue;
+
+            }
+        }
+
+
+    }
+
+    // Create the chart
     var ctx = document.getElementById('chart');
 
     var data = {
@@ -49,58 +81,101 @@
 
     var options = {};
 
-        var audiogramChart = new Chart(ctx, {
-            type: 'line',
-            data: data,
-            options: {
-                responsive: false,
-                layout: {
-                    padding: 50
+    audiogramChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {
+            onClick: (e) => {
+                console.log(e);
+                
+            },
+            responsive: false,
+            layout: {
+                padding: 50
+            },
+            scales: {
+                x: {
+                    title:{
+                        display: true,
+                        text: '周波数(Hz)'
+                    }                        
                 },
-               scales: {
-                    x: {
-                        title:{
-                            display: true,
-                            text: '周波数(Hz)'
-                        }                        
+                y: {
+                    title: {
+                        display: true,
+                        text: '聴力レベル(dB)'
                     },
-                    y: {
-                        title: {
-                            display: true,
-                            text: '聴力レベル(dB)'
-                        },
-                        //top 0 -> bottom 120
-                        reverse: true,
-                        min: -10,
-                        max: 120,
-                        ticks: {
-                            stepSize: 10,
-                            autoSkip: false
-                        }
-                    },
-                }
-            }
-        });
-        
-        function updateChart(){
-            let rightEarData = [];
-            let leftEarData = [];
-
-        for (let j = 1; j <= 11; j++) {
-            let rightEarInputs = document.getElementById("db" + j);
-            let idx = rightEarInputs.selectedIndex;
-            rightEarData.push(rightEarInputs[idx].text);
+                    //top 0 -> bottom 120
+                    reverse: true,
+                    min: -10,
+                    max: 120,
+                    ticks: {
+                        stepSize: 10,
+                        autoSkip: false
+                    }
+                },
+            },
+            
         }
+    });
 
-        for (let j = 12; j <= 22; j++) {
-            let leftEarInputs = document.getElementById("db" + j);
-            let idx = leftEarInputs.selectedIndex;
-            leftEarData.push(leftEarInputs[idx].text);
-        }
-        console.log(leftEarData);
+    // Draw the chart, if there is data in localstorage
+    updateChart();
+}
 
-        audiogramChart.data.datasets[0].data = rightEarData;
-        audiogramChart.data.datasets[1].data = leftEarData;
-        audiogramChart.update();
+
+// When the Update button is clicked, read the values
+// and update the chart
+function btnClick() {
+    readForm();
+    updateChart();
+}
+var updateBtn = document.getElementById("updateBtn");
+updateBtn.addEventListener("click", btnClick);
+
+
+function readForm(){
+    // Load the data from the form and save it
+    let rightEarData = [];
+    let leftEarData = [];
+
+    for (let j = 1; j <= 11; j++) {
+        let rightEarInputs = document.getElementById("db" + j);
+        let idx = rightEarInputs.selectedIndex;
+        rightEarData.push(rightEarInputs[idx].text);
     }
 
+    for (let j = 12; j <= 22; j++) {
+        let leftEarInputs = document.getElementById("db" + j);
+        let idx = leftEarInputs.selectedIndex;
+        leftEarData.push(leftEarInputs[idx].text);
+    }
+    console.log(leftEarData);
+
+    let audiogramData = {
+        left : leftEarData,
+        right : rightEarData
+    }
+    localStorage.setItem("audiogramData", JSON.stringify(audiogramData));
+
+}
+function loadAudiogramData(){
+    return JSON.parse(localStorage.getItem("audiogramData"));
+}
+
+function updateChart(){
+    
+    let audiogramData = loadAudiogramData();
+    if(!audiogramData){
+        return;
+    }
+
+    // Update the chart
+    audiogramChart.data.datasets[0].data = audiogramData.right;
+    audiogramChart.data.datasets[1].data = audiogramData.left;
+    audiogramChart.update();
+}
+
+
+
+init();
