@@ -27,16 +27,15 @@ function init() {
         // we should set this dbSelector.value as that value
         // TODO HERE
         console.log('Lets look for ', j)
-        if(audiogramData && audiogramData.right){
+        if(audiogramData){
             let counter = j - 1;
             let foundRightDbValue = audiogramData.right[counter];
-            // let foundLeftDbValue = audiogramData.left[counter];
-            
-            if(counter > 11) {
-                counter -= 12;
+            console.log(counter);            
+            if(counter >= 11) {
+                counter -= 11;
                 let foundLeftDbValue = audiogramData.left[counter];
                 if(foundLeftDbValue){
-                    
+                    console.log(counter);
                     console.log('We found ', foundLeftDbValue)
                     dbSelector.value = foundLeftDbValue;
                 }
