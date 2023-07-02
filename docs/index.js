@@ -5,10 +5,9 @@ function init() {
 
     // Load the data from localStroage (if it is available)
     let audiogramData = loadAudiogramData();
-    console.log(audiogramData);
 
-    document.querySelectorAll('#rightValues select').forEach( dbSelector => {
-        console.log(dbSelector.id);
+    document.querySelectorAll('#rightValues select,#leftValues select').forEach( dbSelector => {
+        //Make None Option '-'
         let defaultNoneOption = document.createElement("option");
         defaultNoneOption.innerHTML = "-";
         dbSelector.appendChild(defaultNoneOption);
@@ -20,74 +19,26 @@ function init() {
             option.innerHTML = i;
             dbSelector.appendChild(option);
         }
-        // If there is a dB value for this ear + this frequency in localstorage,
-        // we should set this dbSelector.value as that value
-        // 0701 TODO HERE
-        // if(audiogramData){
-        //     let counter = j - 1;
-        //     let foundRightDbValue = audiogramData.right[counter];
-        //     console.log(counter);            
-        //     if(counter >= 11) {
-        //         counter -= 11;
-        //         let foundLeftDbValue = audiogramData.left[counter];
-        //         if(foundLeftDbValue){
-        //             console.log(counter);
-        //             console.log('We found ', foundLeftDbValue)
-        //             dbSelector.value = foundLeftDbValue;
-        //         }
-        //     }            
-        //     if(foundRightDbValue){
-        //         console.log('We found ', foundRightDbValue)
-        //         dbSelector.value = foundRightDbValue;
-
-        //     }
-        // }
     })
 
-    // for (let j = 1; j <= 22; j++) {
-    //     // For each frequency <select> dropdown
+        // If there is a dB value for this ear + this frequency in localstorage,
+        // we should set this dbSelector.value as that value
+        // TODO HERE
 
-    //     //let dbSelector = document.getElementById("db" + j);
-
-
-    //     let none = document.createElement("option");
-    //     none.innerHTML = "-";
-    //     dbSelector.appendChild(none);
-
-        // // Make an <option> element for each dB level
-        // for (let i = -10; i <= 120; i = i + 5) {
-        //     let option = document.createElement("option");
-        //     // option.innerHTML = i + "dB";
-        //     option.innerHTML = i;
-        //     dbSelector.appendChild(option);
-        // }
-
-        // // If there is a dB value for this ear + this frequency in localstorage,
-        // // we should set this dbSelector.value as that value
-        // // TODO HERE
-        // console.log('Lets look for ', j)
-        // if(audiogramData){
-        //     let counter = j - 1;
-        //     let foundRightDbValue = audiogramData.right[counter];
-        //     console.log(counter);            
-        //     if(counter >= 11) {
-        //         counter -= 11;
-        //         let foundLeftDbValue = audiogramData.left[counter];
-        //         if(foundLeftDbValue){
-        //             console.log(counter);
-        //             console.log('We found ', foundLeftDbValue)
-        //             dbSelector.value = foundLeftDbValue;
-        //         }
-        //     }            
-        //     if(foundRightDbValue){
-        //         console.log('We found ', foundRightDbValue)
-        //         dbSelector.value = foundRightDbValue;
-
-        //     }
-        // }
-
-
-    // }
+        if(audiogramData){
+            document.querySelectorAll("#rightValues select").forEach((dbSelect, dbSelectIndex) => {
+                let foundRightDbValue = audiogramData.right[dbSelectIndex];
+                if (foundRightDbValue && foundRightDbValue !== "-") {
+                    dbSelect.value = foundRightDbValue;
+                }
+            });
+            document.querySelectorAll("#leftValues select").forEach((dbSelect, dbSelectIndex) => {
+                let foundLeftDbValue = audiogramData.left[dbSelectIndex];
+                if (foundLeftDbValue && foundLeftDbValue !== "-") {
+                    dbSelect.value = foundLeftDbValue;
+                }
+            });            
+        }
 
     // Create the chart
     var ctx = document.getElementById('chart');
@@ -125,7 +76,6 @@ function init() {
         options: {
             onClick: (e) => {
                 console.log(e);
-                
             },
             responsive: false,
             layout: {
@@ -153,7 +103,6 @@ function init() {
                     }
                 },
             },
-            
         }
     });
 
@@ -171,24 +120,20 @@ function btnClick() {
 var updateBtn = document.getElementById("updateBtn");
 updateBtn.addEventListener("click", btnClick);
 
-//0701TODO
+//0701_TODO
 function readForm(){
     // Load the data from the form and save it
     let rightEarData = [];
     let leftEarData = [];
-
-    for (let j = 1; j <= 11; j++) {
-        let rightEarInputs = document.getElementById("db" + j);
-        let idx = rightEarInputs.selectedIndex;
-        rightEarData.push(rightEarInputs[idx].text);
-    }
-
-    for (let j = 12; j <= 22; j++) {
-        let leftEarInputs = document.getElementById("db" + j);
-        let idx = leftEarInputs.selectedIndex;
-        leftEarData.push(leftEarInputs[idx].text);
-    }
-    console.log(leftEarData);
+    
+    document.querySelectorAll('#rightValues select :checked').forEach(rightEarInputs => {
+        rightEarData.push(rightEarInputs.innerHTML);
+        console.log(rightEarData);
+    })
+    document.querySelectorAll('#leftValues select :checked').forEach(leftEarInputs => {
+        leftEarData.push(leftEarInputs.innerHTML);
+        console.log(leftEarData);
+    })
 
     let audiogramData = {
         left : leftEarData,
