@@ -85,13 +85,13 @@ function init() {
                 x: {
                     title:{
                         display: true,
-                        text: '周波数(Hz)'
+                        text: '音の高さ：周波数(Hz) / Pitch in Hertz(Hz)'
                     }                        
                 },
                 y: {
                     title: {
                         display: true,
-                        text: '聴力レベル(dB)'
+                        text: '音の大きさ：聴力レベル(dB) / Hearing Level in Decibels(dB)'
                     },
                     //top 0 -> bottom 120
                     reverse: true,
@@ -105,7 +105,6 @@ function init() {
             },
         }
     });
-
     // Draw the chart, if there is data in localstorage
     updateChart();
 }
@@ -152,7 +151,6 @@ function updateChart(){
     if(!audiogramData){
         return;
     }
-
     // Update the chart
     audiogramChart.data.datasets[0].data = audiogramData.right;
     audiogramChart.data.datasets[1].data = audiogramData.left;
