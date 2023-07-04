@@ -1,6 +1,19 @@
 .chart-container {
     position: relative;
     margin: auto;
-    height: 1000px;
-    width: 750px;
+    height: 1100px;
+    width: 800px;
+}
+
+@media print{
+    .print_none{
+        display: none;
+    }
+}
+@media print{
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
 }

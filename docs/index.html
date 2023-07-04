@@ -17,13 +17,14 @@
 
 <body>
     <div class="container-sm">
-        <div class="row">
+        <div class="row print_none">
             <p>
                 Hearing Test Result
             </p>
             <form>
-                <input type="button" value="Print / PDF" onclick="window.print();">
-            </form>        </div>
+                <input type="button" value="Print / PDF" onclick="window.print();" class="btn btn-outline-primary">
+            </form>        
+        </div>
         <table class="table">
             <caption>CAPTION</caption>
                 <thead>
@@ -45,82 +46,85 @@
                 <tr id="rightValues">
                     <th scope="row">RIGHT</th>
                     <td>
-                        <select name="right125" id="right125" ></select>
+                        <select name="right125" id="right125" class="btn btn-light dropdown-toggle" ></select>
                     </td>
                     <td>
-                        <select name="right250" id="right250" ></select>
+                        <select name="right250" id="right250" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="right500" id="right500" ></select>
+                        <select name="right500" id="right500" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="right750" id="right750" ></select>
+                        <select name="right750" id="right750" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="right1000" id="right1000" ></select>
+                        <select name="right1000" id="right1000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="right1500" id="right1500" ></select>
+                        <select name="right1500" id="right1500" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="right2000" id="right2000" ></select>
+                        <select name="right2000" id="right2000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="right3000" id="right3000" ></select>
+                        <select name="right3000" id="right3000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="right4000" id="right4000" ></select>
+                        <select name="right4000" id="right4000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="right6000" id="right6000" ></select>
+                        <select name="right6000" id="right6000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="right8000" id="right8000" ></select>
+                        <select name="right8000" id="right8000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                 </tr>
                 <tr id="leftValues">
                     <th scope="row">LEFT</th>
                     <td>
-                        <select name="left125" id="left125" ></select>
+                        <select name="left125" id="left125" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="left250" id="left250" ></select>
+                        <select name="left250" id="left250" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="left500" id="left500" ></select>
+                        <select name="left500" id="left500" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="left750" id="left750" ></select>
+                        <select name="left750" id="left750" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="left1000" id="left1000" ></select>
+                        <select name="left1000" id="left1000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="left1500" id="left1500" ></select>
+                        <select name="left1500" id="left1500" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="left2000" id="left2000" ></select>
+                        <select name="left2000" id="left2000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="left3000" id="left3000" ></select>
+                        <select name="left3000" id="left3000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="left4000" id="left4000" ></select>
+                        <select name="left4000" id="left4000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="left6000" id="left6000" ></select>
+                        <select name="left6000" id="left6000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                     <td>
-                        <select name="left8000" id="left8000" ></select>
+                        <select name="left8000" id="left8000" class="btn btn-light dropdown-toggle"></select>
                     </td>
                 </tr>
             </table>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Memo</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>            
             <!-- updateBtn -->
-            <input type="button" value="Update" id="updateBtn" />
-        
+            <input class="print_none btn btn-outline-primary btn-lg" type="button" value="Update" id="updateBtn" />
         </div>
         <div class="chart-container" >
-            <canvas id="chart" width="600px" height="600px"></canvas>
+            <canvas id="chart" width="800px" height="800px"></canvas>
         </div>
         
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js" ></script>
