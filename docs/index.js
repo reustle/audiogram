@@ -39,7 +39,6 @@ function init() {
                 }
             });            
         }
-
     // Create the chart
     var ctx = document.getElementById('chart');
 
@@ -119,7 +118,34 @@ function btnClick() {
 var updateBtn = document.getElementById("updateBtn");
 updateBtn.addEventListener("click", btnClick);
 
-//0701_TODO
+// When the Clear button is clicked, remove the values and memo
+function clear(){
+    //TODO
+
+    let audiogramData = loadAudiogramData();
+    document.querySelectorAll("#rightValues select").forEach((dbSelect, dbSelectIndex) => {
+        let foundRightDbValue = audiogramData.right[dbSelectIndex];
+        if (foundRightDbValue && foundRightDbValue !== "-") {
+            dbSelect.value = "-";
+        }
+    });
+    document.querySelectorAll("#leftValues select").forEach((dbSelect, dbSelectIndex) => {
+        let foundLeftDbValue = audiogramData.left[dbSelectIndex];
+        if (foundLeftDbValue && foundLeftDbValue !== "-") {
+            dbSelect.value = "-";
+        }
+    });
+    readForm();
+    updateChart();
+    localStorage.clear();
+
+    let memo = document.getElementById("memo");
+    memo.value = '';
+
+}
+var clearBtn = document.getElementById("clearBtn");
+clearBtn.addEventListener("click", clear);
+
 function readForm(){
     // Load the data from the form and save it
     let rightEarData = [];
@@ -156,6 +182,7 @@ function updateChart(){
     audiogramChart.data.datasets[1].data = audiogramData.left;
     audiogramChart.update();
 }
+
 
 
 

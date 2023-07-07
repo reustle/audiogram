@@ -117,18 +117,20 @@
                 </tr>
             </table>
             <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Memo</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <label for="memo" class="form-label">Memo</label>
+                <textarea class="form-control" id="memo" rows="3"></textarea>
             </div>            
             <!-- updateBtn -->
-            <input class="print_none btn btn-outline-primary btn-lg" type="button" value="Update" id="updateBtn" />
+            <input class="print_none btn btn-outline-primary btn-lg" type="button" value="更新/Update" id="updateBtn" />
+            <!-- clearBtn -->
+            <input class="print_none btn btn-outline-primary btn-lg" type="button" value="データ削除/Clear Data" id="clearBtn" onClick="clear()" />
+            
         </div>
         <div class="chart-container" >
             <canvas id="chart" width="700px" height="700px"></canvas>
         </div>
         
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js" ></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="index.js"></script>
 </body>
 </html>
