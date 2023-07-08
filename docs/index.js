@@ -120,8 +120,7 @@ updateBtn.addEventListener("click", btnClick);
 
 // When the Clear button is clicked, remove the values and memo
 function clear(){
-    //TODO
-
+    //0707
     let audiogramData = loadAudiogramData();
     document.querySelectorAll("#rightValues select").forEach((dbSelect, dbSelectIndex) => {
         let foundRightDbValue = audiogramData.right[dbSelectIndex];
@@ -159,6 +158,7 @@ function readForm(){
         leftEarData.push(leftEarInputs.innerHTML);
         console.log(leftEarData);
     })
+    //TODO get memo data 
 
     let audiogramData = {
         left : leftEarData,
