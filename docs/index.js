@@ -37,6 +37,18 @@ function init() {
                     dbSelect.value = foundLeftDbValue;
                 }
             });
+            document.querySelectorAll("#rightBoneValues select").forEach((dbSelect, dbSelectIndex) => {
+                let foundRightBoneDbValue = audiogramData.rightBone[dbSelectIndex];
+                if (foundRightBoneDbValue && foundRightBoneDbValue !== "-") {
+                    dbSelect.value = foundRightBoneDbValue;
+                }
+            });
+            document.querySelectorAll("#leftBoneValues select").forEach((dbSelect, dbSelectIndex) => {
+                let foundLeftBoneDbValue = audiogramData.leftBone[dbSelectIndex];
+                if (foundLeftBoneDbValue && foundLeftBoneDbValue !== "-") {
+                    dbSelect.value = foundLeftBoneDbValue;
+                }
+            });
             document.getElementById("memo").value = audiogramData.memo;
 
         }
@@ -68,8 +80,9 @@ function init() {
             {
                 label: 'RightBone',
                 data: [],
-                borderColor: 'rgba(15, 10, 222, 1)',
+                borderColor: 'rgba(255, 100, 100, 1)',
                 spanGaps: true,
+                showLine:false,
                 pointStyle: 'crossRot',
                 pointRadius: 10,
                 pointHoverRadius: 15,
@@ -79,6 +92,7 @@ function init() {
                 data: [],
                 borderColor: 'rgba(15, 10, 222, 1)',
                 spanGaps: true,
+                showLine:false,
                 pointStyle: 'crossRot',
                 pointRadius: 10,
                 pointHoverRadius: 15,
@@ -167,8 +181,8 @@ function readForm(){
     // Load the data from the form and save it
     let rightEarData = [];
     let leftEarData = [];
-    let rightBoneData = [];
-    let leftBoneData = [];
+    let rightBoneData = ['-'];
+    let leftBoneData = ['-'];
     document.querySelectorAll('#rightValues select :checked').forEach(rightEarInputs => {
         rightEarData.push(rightEarInputs.innerHTML);
         console.log(rightEarData);
