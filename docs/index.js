@@ -2,11 +2,10 @@ let audiogramChart;
 
 function init() {
     // Add dB options to each dropdown
-
     // Load the data from localStroage (if it is available)
     let audiogramData = loadAudiogramData();
 
-    document.querySelectorAll('#rightValues select,#leftValues select').forEach( dbSelector => {
+    document.querySelectorAll('#rightValues select,#leftValues select,#rightBoneValues select, #leftBoneValues select').forEach( dbSelector => {
         //Make None Option '-'
         let defaultNoneOption = document.createElement("option");
         defaultNoneOption.innerHTML = "-";
@@ -37,7 +36,9 @@ function init() {
                 if (foundLeftDbValue && foundLeftDbValue !== "-") {
                     dbSelect.value = foundLeftDbValue;
                 }
-            });            
+            });
+            document.getElementById("memo").value = audiogramData.memo;
+
         }
     // Create the chart
     var ctx = document.getElementById('chart');
@@ -63,7 +64,25 @@ function init() {
                 pointStyle: 'crossRot',
                 pointRadius: 10,
                 pointHoverRadius: 15,
-            }
+            },
+            {
+                label: 'RightBone',
+                data: [],
+                borderColor: 'rgba(15, 10, 222, 1)',
+                spanGaps: true,
+                pointStyle: 'crossRot',
+                pointRadius: 10,
+                pointHoverRadius: 15,
+            },
+            {
+                label: 'LeftBone',
+                data: [],
+                borderColor: 'rgba(15, 10, 222, 1)',
+                spanGaps: true,
+                pointStyle: 'crossRot',
+                pointRadius: 10,
+                pointHoverRadius: 15,
+            }            
         ]
     };
 
@@ -140,7 +159,6 @@ function clear(){
 
     let memo = document.getElementById("memo");
     memo.value = '';
-
 }
 var clearBtn = document.getElementById("clearBtn");
 clearBtn.addEventListener("click", clear);
@@ -149,7 +167,8 @@ function readForm(){
     // Load the data from the form and save it
     let rightEarData = [];
     let leftEarData = [];
-    
+    let rightBoneData = [];
+    let leftBoneData = [];
     document.querySelectorAll('#rightValues select :checked').forEach(rightEarInputs => {
         rightEarData.push(rightEarInputs.innerHTML);
         console.log(rightEarData);
@@ -158,11 +177,22 @@ function readForm(){
         leftEarData.push(leftEarInputs.innerHTML);
         console.log(leftEarData);
     })
-    //TODO get memo data 
+    document.querySelectorAll('#rightBoneValues select :checked').forEach(rightBoneInputs => {
+        rightBoneData.push(rightBoneInputs.innerHTML);
+        console.log(rightBoneData);
+    })
+    document.querySelectorAll('#leftBoneValues select :checked').forEach(leftBoneInputs => {
+        leftBoneData.push(leftBoneInputs.innerHTML);
+        console.log(leftBoneData);
+    })
+    let memo = document.getElementById("memo").value;
 
     let audiogramData = {
         left : leftEarData,
-        right : rightEarData
+        right : rightEarData,
+        rightBone : rightBoneData,
+        leftBone : leftBoneData,
+        memo : memo 
     }
     localStorage.setItem("audiogramData", JSON.stringify(audiogramData));
 
@@ -180,6 +210,10 @@ function updateChart(){
     // Update the chart
     audiogramChart.data.datasets[0].data = audiogramData.right;
     audiogramChart.data.datasets[1].data = audiogramData.left;
+    audiogramChart.data.datasets[2].data = audiogramData.rightBone;
+    audiogramChart.data.datasets[3].data = audiogramData.leftBone;
+
+
     audiogramChart.update();
 }
 
