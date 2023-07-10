@@ -26,8 +26,8 @@
             </form>        
         </div>
         <table class="table">
-            <caption>気導:AIR CONDUCTION</caption>
                 <thead>
+                    <p>気導 / AIR CONDUCTION</p>
                     <tr>
                         <th scope="col">気導</th>
                         <th scope="col">125</th>
@@ -44,7 +44,7 @@
                     </tr>
                 </thead>
                 <tr id="rightValues">
-                    <th scope="row">RIGHT</th>
+                    <th scope="row">右 / RIGHT</th>
                     <td>
                         <select name="right125" id="right125" class="btn btn-light dropdown-toggle" ></select>
                     </td>
@@ -80,7 +80,7 @@
                     </td>
                 </tr>
                 <tr id="leftValues">
-                    <th scope="row">LEFT</th>
+                    <th scope="row">左 / LEFT</th>
                     <td>
                         <select name="left125" id="left125" class="btn btn-light dropdown-toggle"></select>
                     </td>
@@ -116,9 +116,82 @@
                     </td>
                 </tr>
             </table>
+            <details>
+                <summary>骨導/BONE CONDUCTION</summary>
+                <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">骨導</th>
+                                <th scope="col">250</th>
+                                <th scope="col">500</th>
+                                <th scope="col">750</th>
+                                <th scope="col">1000</th>
+                                <th scope="col">1500</th>
+                                <th scope="col">2000</th>
+                                <th scope="col">3000</th>
+                                <th scope="col">4000</th>
+                            </tr>
+                        </thead>
+                        <tr id="rightBoneValues">
+                            <th scope="row">右 / RIGHT</th>
+                            <td>
+                                <select name="rightBone250" id="rightBone250" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="rightBone500" id="rightBone500" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="rightBone750" id="rightBone750" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="rightBone1000" id="rightBone1000" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="rightBone1500" id="rightBone1500" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="rightBone2000" id="rightBone2000" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="rightBone3000" id="rightBone3000" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="rightBone4000" id="rightBone4000" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                        </tr>
+                        <tr id="leftBoneValues">
+                            <th scope="row">左 / LEFT</th>
+                            <td>
+                                <select name="leftBone250" id="leftBone250" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="leftBone500" id="leftBone500" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="leftBone750" id="leftBone750" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="leftBone1000" id="leftBone1000" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="leftBone1500" id="leftBone1500" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="leftBone2000" id="leftBone2000" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="leftBone3000" id="leftBone3000" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                            <td>
+                                <select name="leftBone4000" id="leftBone4000" class="btn btn-light dropdown-toggle"></select>
+                            </td>
+                        </tr>
+                    </table>                
+            </details>
+            
             <div class="mb-3">
-                <label for="memo" class="form-label">Memo</label>
-                <textarea class="form-control" id="memo" rows="3"></textarea>
+                <label id="memo_label" name="memo" class="form-label">Memo</label>
+                <textarea class="form-control" id="memo" rows="1"></textarea>
             </div>            
             <!-- updateBtn -->
             <input class="print_none btn btn-outline-primary btn-lg" type="button" value="更新/Update" id="updateBtn" />
