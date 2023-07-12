@@ -22,8 +22,7 @@ function init() {
 
         // If there is a dB value for this ear + this frequency in localstorage,
         // we should set this dbSelector.value as that value
-        // TODO HERE
-
+        
         if(audiogramData){
             document.querySelectorAll("#rightValues select").forEach((dbSelect, dbSelectIndex) => {
                 let foundRightDbValue = audiogramData.right[dbSelectIndex];
@@ -52,8 +51,8 @@ function init() {
             document.getElementById("memo").value = audiogramData.memo;
 
         }
-    // Create the chart
-    var ctx = document.getElementById('chart');
+
+    var ctx = document.getElementById('chart').getContext("2d");
 
     var data = {
         labels: ["125", "250", "500", "750", "1000", "1500", "2000", "3000", "4000", "6000", "8000"],
@@ -93,19 +92,24 @@ function init() {
                 borderColor: 'rgba(15, 10, 222, 1)',
                 spanGaps: true,
                 showLine:false,
-                pointStyle: 'crossRot',
+                pointStyle: [pointImage],
                 pointRadius: 10,
                 pointHoverRadius: 15,
+                
             }            
         ]
     };
 
-    var options = {};
-
+    // Create the chart
     audiogramChart = new Chart(ctx, {
         type: 'line',
         data: data,
         options: {
+            elements:{
+                point:{
+                    pointStyle:[pointImage]
+                }
+            },
             onClick: (e) => {
                 console.log(e);
             },
@@ -134,13 +138,14 @@ function init() {
                         autoSkip: false
                     }
                 },
-            },
+            }
         }
     });
     // Draw the chart, if there is data in localstorage
     updateChart();
 }
-
+const pointImage = new Image(25,25);
+pointImage.src = 'https://www.chartjs.org/chartjs-plugin-annotation/latest/favicon.png';
 
 // When the Update button is clicked, read the values
 // and update the chart
@@ -167,6 +172,13 @@ function clear(){
             dbSelect.value = "-";
         }
     });
+    document.querySelectorAll("#rightBoneValues select").forEach((dbSelect) => {
+        dbSelect.value = "-";
+    });
+    document.querySelectorAll("#leftBoneValues select").forEach((dbSelect) => {
+        dbSelect.value = "-";
+    });
+
     readForm();
     updateChart();
     localStorage.clear();
@@ -185,19 +197,15 @@ function readForm(){
     let leftBoneData = ['-'];
     document.querySelectorAll('#rightValues select :checked').forEach(rightEarInputs => {
         rightEarData.push(rightEarInputs.innerHTML);
-        console.log(rightEarData);
     })
     document.querySelectorAll('#leftValues select :checked').forEach(leftEarInputs => {
         leftEarData.push(leftEarInputs.innerHTML);
-        console.log(leftEarData);
     })
     document.querySelectorAll('#rightBoneValues select :checked').forEach(rightBoneInputs => {
         rightBoneData.push(rightBoneInputs.innerHTML);
-        console.log(rightBoneData);
     })
     document.querySelectorAll('#leftBoneValues select :checked').forEach(leftBoneInputs => {
         leftBoneData.push(leftBoneInputs.innerHTML);
-        console.log(leftBoneData);
     })
     let memo = document.getElementById("memo").value;
 
