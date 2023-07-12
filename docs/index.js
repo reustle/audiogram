@@ -107,7 +107,12 @@ function init() {
         options: {
             elements:{
                 point:{
-                    pointStyle:[pointImage]
+                    pointStyle:[pointImage],
+                }
+            },
+            plugins:{
+                legend:{
+                    position:'top'
                 }
             },
             onClick: (e) => {
@@ -144,8 +149,10 @@ function init() {
     // Draw the chart, if there is data in localstorage
     updateChart();
 }
-const pointImage = new Image(25,25);
-pointImage.src = 'https://www.chartjs.org/chartjs-plugin-annotation/latest/favicon.png';
+const pointImage = new Image(20,20);
+pointImage.src = 'https://github.com/Harukka/audiogram/blob/main/docs/left_bone.png?raw=true';
+const pointImage2 = new Image(20,20);
+pointImage2.src = 'https://github.com/Harukka/audiogram/blob/main/docs/left_bone.png?raw=true';
 
 // When the Update button is clicked, read the values
 // and update the chart
