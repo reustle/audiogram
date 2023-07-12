@@ -4,6 +4,11 @@ function init() {
     // Add dB options to each dropdown
     // Load the data from localStroage (if it is available)
     let audiogramData = loadAudiogramData();
+    const pointImageL = new Image(20,20);
+    pointImageL.src = 'https://github.com/Harukka/audiogram/blob/main/docs/left_bone.png?raw=true';
+    const pointImageR = new Image(20,20);
+    pointImageR.src = 'https://github.com/Harukka/audiogram/blob/main/docs/right_bone.png?raw=true';
+        
 
     document.querySelectorAll('#rightValues select,#leftValues select,#rightBoneValues select, #leftBoneValues select').forEach( dbSelector => {
         //Make None Option '-'
@@ -79,23 +84,21 @@ function init() {
             {
                 label: 'RightBone',
                 data: [],
-                borderColor: 'rgba(255, 100, 100, 1)',
                 spanGaps: true,
                 showLine:false,
-                pointStyle: 'crossRot',
+                pointStyle: [pointImageR],
                 pointRadius: 10,
                 pointHoverRadius: 15,
+             
             },
             {
                 label: 'LeftBone',
                 data: [],
-                borderColor: 'rgba(15, 10, 222, 1)',
                 spanGaps: true,
                 showLine:false,
-                pointStyle: [pointImage],
+                pointStyle: [pointImageL],
                 pointRadius: 10,
                 pointHoverRadius: 15,
-                
             }            
         ]
     };
@@ -107,7 +110,7 @@ function init() {
         options: {
             elements:{
                 point:{
-                    pointStyle:[pointImage],
+                    pointStyle:[pointImageL, pointImageR],
                 }
             },
             plugins:{
@@ -149,10 +152,6 @@ function init() {
     // Draw the chart, if there is data in localstorage
     updateChart();
 }
-const pointImage = new Image(20,20);
-pointImage.src = 'https://github.com/Harukka/audiogram/blob/main/docs/left_bone.png?raw=true';
-const pointImage2 = new Image(20,20);
-pointImage2.src = 'https://github.com/Harukka/audiogram/blob/main/docs/left_bone.png?raw=true';
 
 // When the Update button is clicked, read the values
 // and update the chart
