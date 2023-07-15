@@ -10,12 +10,12 @@ function init() {
     pointImageR.src = 'https://github.com/Harukka/audiogram/blob/main/docs/right_bone.png?raw=true';
         
 
-    document.querySelectorAll('#rightValues select,#leftValues select,#rightBoneValues select, #leftBoneValues select').forEach( dbSelector => {
+    document.querySelectorAll('#rightValues select,#leftValues select,#rightBoneValues select, #leftBoneValues select').forEach( (dbSelector, dbSelectorIndex) => {
         //Make None Option '-'
         let defaultNoneOption = document.createElement("option");
         defaultNoneOption.innerHTML = "-";
-        dbSelector.appendChild(defaultNoneOption);
-         
+        dbSelector.appendChild(defaultNoneOption)
+
         // Make an <option> element for each dB level
         for (let i = -10; i <= 120; i = i + 5) {
             let option = document.createElement("option");
@@ -23,7 +23,8 @@ function init() {
             option.innerHTML = i;
             dbSelector.appendChild(option);
         }
-    })
+        
+        })
 
         // If there is a dB value for this ear + this frequency in localstorage,
         // we should set this dbSelector.value as that value
@@ -53,6 +54,7 @@ function init() {
                     dbSelect.value = foundLeftBoneDbValue;
                 }
             });
+            
             document.getElementById("memo").value = audiogramData.memo;
 
         }
@@ -103,7 +105,7 @@ function init() {
         ]
     };
 
-    // Create the chart
+    // Create the chart(config)
     audiogramChart = new Chart(ctx, {
         type: 'line',
         data: data,
@@ -115,7 +117,10 @@ function init() {
             },
             plugins:{
                 legend:{
-                    position:'top'
+                    position:'top',
+                    labels:{
+                        usePointStyle: true,
+                    }
                 }
             },
             onClick: (e) => {
@@ -194,6 +199,14 @@ function clear(){
 }
 var clearBtn = document.getElementById("clearBtn");
 clearBtn.addEventListener("click", clear);
+
+// Function to update the properties of the clicked point with an image
+function updateClickedPointWithImage(index, imagePath) {
+    myChart.data.datasets[0].pointStyle[index] = 'image';
+    myChart.data.datasets[0].pointStyleImage[index] = imagePath;
+    myChart.update();
+  }
+
 
 function readForm(){
     // Load the data from the form and save it
