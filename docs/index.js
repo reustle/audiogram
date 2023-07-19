@@ -214,6 +214,12 @@ function readForm(){
     let leftEarData = [];
     let rightBoneData = ['-'];
     let leftBoneData = ['-'];
+    let selected = [];
+    selected =document.querySelectorAll('input[type="checkbox"]:checked');
+    console.log(selected);
+    selected =document.querySelectorAll('#lBoneScaleOut:checked');
+    console.log(selected);
+
     document.querySelectorAll('#rightValues select :checked').forEach(rightEarInputs => {
         rightEarData.push(rightEarInputs.innerHTML);
     })
@@ -226,6 +232,7 @@ function readForm(){
     document.querySelectorAll('#leftBoneValues select :checked').forEach(leftBoneInputs => {
         leftBoneData.push(leftBoneInputs.innerHTML);
     })
+
     let memo = document.getElementById("memo").value;
 
     let audiogramData = {
