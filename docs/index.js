@@ -215,9 +215,9 @@ function readForm(){
     let rightBoneData = ['-'];
     let leftBoneData = ['-'];
     let selected = [];
-    selected =document.querySelectorAll('input[type="checkbox"]:checked');
-    console.log(selected);
-    selected =document.querySelectorAll('#lBoneScaleOut:checked');
+    // selected =document.querySelectorAll('input[type="checkbox"]:checked');
+    // console.log(selected);
+    selected =document.querySelectorAll('#leftBoneValues input[type="checkbox"]:checked');
     console.log(selected);
 
     document.querySelectorAll('#rightValues select :checked').forEach(rightEarInputs => {
