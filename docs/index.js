@@ -213,12 +213,12 @@ function readForm(){
     let rightEarData = [];
     let leftEarData = [];
     let rightBoneData = ['-'];
-    let leftBoneData = ['-'];
-    let selected = [];
+    let leftBoneData = [{frequency :'-',checked:false}];
+    // let selected = [];
     // selected =document.querySelectorAll('input[type="checkbox"]:checked');
     // console.log(selected);
-    selected =document.querySelectorAll('#leftBoneValues input[type="checkbox"]:checked');
-    console.log(selected);
+    // selected =document.querySelectorAll('#leftBoneValues select :checked, input[type="checkbox"]:checked');
+    // console.log(selected);
 
     document.querySelectorAll('#rightValues select :checked').forEach(rightEarInputs => {
         rightEarData.push(rightEarInputs.innerHTML);
@@ -229,10 +229,11 @@ function readForm(){
     document.querySelectorAll('#rightBoneValues select :checked').forEach(rightBoneInputs => {
         rightBoneData.push(rightBoneInputs.innerHTML);
     })
-    document.querySelectorAll('#leftBoneValues select :checked').forEach(leftBoneInputs => {
-        leftBoneData.push(leftBoneInputs.innerHTML);
+    document.querySelectorAll('#leftBoneValues select :checked, input[type="checkbox"]:checked').forEach(leftBoneInputs => {
+        
+        leftBoneData.push({frequency:leftBoneInputs.innerHTML,checked:leftBoneInputs.checked});
     })
-
+    console.log(leftBoneData)
     let memo = document.getElementById("memo").value;
 
     let audiogramData = {
