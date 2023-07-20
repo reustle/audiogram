@@ -212,7 +212,7 @@ function readForm(){
     // Load the data from the form and save it
     let rightEarData = [];
     let leftEarData = [];
-    let rightBoneData = ['-'];
+    let rightBoneData = [{frequency :'-',checked:false}];
     let leftBoneData = [{frequency :'-',checked:false}];
     // let selected = [];
     // selected =document.querySelectorAll('input[type="checkbox"]:checked');
@@ -226,8 +226,8 @@ function readForm(){
     document.querySelectorAll('#leftValues select :checked').forEach(leftEarInputs => {
         leftEarData.push(leftEarInputs.innerHTML);
     })
-    document.querySelectorAll('#rightBoneValues select :checked').forEach(rightBoneInputs => {
-        rightBoneData.push(rightBoneInputs.innerHTML);
+    document.querySelectorAll('#rightBoneValues select :checked, input[type="checkbox"]:checked').forEach(rightBoneInputs => {
+        rightBoneData.push({frequency:rightBoneInputs.innerHTML,checked:rightBoneInputs.checked});
     })
     document.querySelectorAll('#leftBoneValues select :checked, input[type="checkbox"]:checked').forEach(leftBoneInputs => {
         
@@ -259,8 +259,8 @@ function updateChart(){
     // Update the chart
     audiogramChart.data.datasets[0].data = audiogramData.right;
     audiogramChart.data.datasets[1].data = audiogramData.left;
-    audiogramChart.data.datasets[2].data = audiogramData.rightBone;
-    audiogramChart.data.datasets[3].data = audiogramData.leftBone;
+    audiogramChart.data.datasets[2].data = audiogramData.rightBone.frequency;
+    audiogramChart.data.datasets[3].data = audiogramData.leftBone.frequency;
 
 
     audiogramChart.update();
