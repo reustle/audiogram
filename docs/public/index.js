@@ -46,25 +46,6 @@ function init() {
                 }
             });
         });
-
-        // document.querySelectorAll("#leftValues select").forEach((dbSelect, dbSelectIndex) => {
-        //     let foundLeftDbValue = audiogramData.left[dbSelectIndex].frequency;
-        //     if (foundLeftDbValue && foundLeftDbValue !== "-") {
-        //         dbSelect.value = foundLeftDbValue;
-        //     }
-        // });
-        // document.querySelectorAll("#rightBoneValues select").forEach((dbSelect, dbSelectIndex) => {
-        //     let foundRightBoneDbValue = audiogramData.rightBone[dbSelectIndex].frequency;
-        //     if (foundRightBoneDbValue && foundRightBoneDbValue !== "-") {
-        //         dbSelect.value = foundRightBoneDbValue;
-        //     }
-        // });
-        // document.querySelectorAll("#leftBoneValues select").forEach((dbSelect, dbSelectIndex) => {
-        //     let foundLeftBoneDbValue = audiogramData.leftBone[dbSelectIndex].frequency;
-        //     if (foundLeftBoneDbValue && foundLeftBoneDbValue !== "-") {
-        //         dbSelect.value = foundLeftBoneDbValue;
-        //     }
-        // });
         
         document.getElementById("memo").value = audiogramData.memo;
 
@@ -171,21 +152,24 @@ function init() {
 
 // When the Update button is clicked, read the values
 // and update the chart
-function btnClick() {
+function updateBtnClick() {
     readForm();
     updateChart();
 }
 var updateBtn = document.getElementById("updateBtn");
-updateBtn.addEventListener("click", btnClick);
+updateBtn.addEventListener("click", updateBtnClick);
+
+// Save the form and draw the chart every time the input changes
+document.querySelectorAll('select.frequencyInput, input.scaleOutInput').forEach( (input) => {
+    input.addEventListener('change', updateBtnClick);
+});
 
 // When the Clear button is clicked, remove the values and memo
 function clear(){
-
     if( confirm("本当にすべてのデータを消去しますか？") ){
         localStorage.clear();
         window.location.reload(); // Refresh the page
     }
-
 }
 var clearBtn = document.getElementById("clearBtn");
 clearBtn.addEventListener("click", clear);
@@ -195,7 +179,7 @@ function updateClickedPointWithImage(index, imagePath) {
     myChart.data.datasets[0].pointStyle[index] = 'image';
     myChart.data.datasets[0].pointStyleImage[index] = imagePath;
     myChart.update();
-  }
+}
 
 
 function readForm(){
