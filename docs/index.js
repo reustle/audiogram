@@ -214,23 +214,19 @@ function readForm(){
     let leftEarData = [];
     let rightBoneData = [{frequency :'-',checked:false}];
     let leftBoneData = [{frequency :'-',checked:false}];
-    // let selected = [];
-    // selected =document.querySelectorAll('input[type="checkbox"]:checked');
-    // console.log(selected);
-    // selected =document.querySelectorAll('#leftBoneValues select :checked, input[type="checkbox"]:checked');
-    // console.log(selected);
-
-    document.querySelectorAll('#rightValues select :checked').forEach(rightEarInputs => {
-        rightEarData.push(rightEarInputs.innerHTML);
+    
+    //Dictionary ですか？
+    document.querySelectorAll('#rightValues select :checked , input[type="checkbox"]:checked').forEach(rightEarInputs => {
+        rightEarData.push({frequency:rightEarInputs.innerHTML, checked:rightEarInputs.checked});
     })
-    document.querySelectorAll('#leftValues select :checked').forEach(leftEarInputs => {
-        leftEarData.push(leftEarInputs.innerHTML);
+    console.log(rightEarData)
+    document.querySelectorAll('#leftValues select :checked, input[type="checkbox"]:checked').forEach(leftEarInputs => {
+        leftEarData.push({frequency:leftEarInputs.innerHTML,checked:leftEarInputs.checked});
     })
     document.querySelectorAll('#rightBoneValues select :checked, input[type="checkbox"]:checked').forEach(rightBoneInputs => {
         rightBoneData.push({frequency:rightBoneInputs.innerHTML,checked:rightBoneInputs.checked});
     })
     document.querySelectorAll('#leftBoneValues select :checked, input[type="checkbox"]:checked').forEach(leftBoneInputs => {
-        
         leftBoneData.push({frequency:leftBoneInputs.innerHTML,checked:leftBoneInputs.checked});
     })
     console.log(leftBoneData)
@@ -259,8 +255,8 @@ function updateChart(){
     // Update the chart
     audiogramChart.data.datasets[0].data = audiogramData.right;
     audiogramChart.data.datasets[1].data = audiogramData.left;
-    audiogramChart.data.datasets[2].data = audiogramData.rightBone.frequency;
-    audiogramChart.data.datasets[3].data = audiogramData.leftBone.frequency;
+    audiogramChart.data.datasets[2].data = audiogramData.rightBone;
+    audiogramChart.data.datasets[3].data = audiogramData.leftBone;
 
 
     audiogramChart.update();
