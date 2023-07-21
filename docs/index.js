@@ -217,17 +217,29 @@ function readForm(){
     
     //Dictionary ですか？
     document.querySelectorAll('#rightValues select :checked , input[type="checkbox"]:checked').forEach(rightEarInputs => {
-        rightEarData.push({frequency:rightEarInputs.innerHTML, checked:rightEarInputs.checked});
+        rightEarData.push({
+            frequency: rightEarInputs.innerHTML, 
+            checked: rightEarInputs.checked? true:false
+        });
     })
     console.log(rightEarData)
     document.querySelectorAll('#leftValues select :checked, input[type="checkbox"]:checked').forEach(leftEarInputs => {
-        leftEarData.push({frequency:leftEarInputs.innerHTML,checked:leftEarInputs.checked});
+        leftEarData.push({
+            frequency:leftEarInputs.innerHTML,
+            checked:leftEarInputs.checked? true:false
+        });
     })
     document.querySelectorAll('#rightBoneValues select :checked, input[type="checkbox"]:checked').forEach(rightBoneInputs => {
-        rightBoneData.push({frequency:rightBoneInputs.innerHTML,checked:rightBoneInputs.checked});
+        rightBoneData.push({
+            frequency:rightBoneInputs.innerHTML,
+            checked:rightBoneInputs.checked? true:false
+        });
     })
     document.querySelectorAll('#leftBoneValues select :checked, input[type="checkbox"]:checked').forEach(leftBoneInputs => {
-        leftBoneData.push({frequency:leftBoneInputs.innerHTML,checked:leftBoneInputs.checked});
+        leftBoneData.push({
+            frequency:leftBoneInputs.innerHTML,
+            checked:leftBoneInputs.checked? true:false
+        });
     })
     console.log(leftBoneData)
     let memo = document.getElementById("memo").value;
