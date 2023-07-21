@@ -4,9 +4,9 @@ function init() {
     
     // Prepare our bone images
     const pointImageL = new Image(20,20);
-    pointImageL.src = 'https://github.com/Harukka/audiogram/blob/main/docs/left_bone.png?raw=true';
+    pointImageL.src = '/public/img/left_bone.png';
     const pointImageR = new Image(20,20);
-    pointImageR.src = 'https://github.com/Harukka/audiogram/blob/main/docs/right_bone.png?raw=true';
+    pointImageR.src = '/public/img/right_bone.png';
     
     // Add dB options to each dropdown
     // Load the data from localStroage if it is available
@@ -135,7 +135,7 @@ function init() {
                 }
             },
             onClick: (e) => {
-                console.log(e);
+                console.log('mapClick', e);
             },
             responsive: false,
             layout: {
@@ -180,33 +180,12 @@ updateBtn.addEventListener("click", btnClick);
 
 // When the Clear button is clicked, remove the values and memo
 function clear(){
-    //0707
-    let audiogramData = loadAudiogramData();
-    document.querySelectorAll("#rightValues select").forEach((dbSelect, dbSelectIndex) => {
-        let foundRightDbValue = audiogramData.right[dbSelectIndex];
-        if (foundRightDbValue && foundRightDbValue !== "-") {
-            dbSelect.value = "-";
-        }
-    });
-    document.querySelectorAll("#leftValues select").forEach((dbSelect, dbSelectIndex) => {
-        let foundLeftDbValue = audiogramData.left[dbSelectIndex];
-        if (foundLeftDbValue && foundLeftDbValue !== "-") {
-            dbSelect.value = "-";
-        }
-    });
-    document.querySelectorAll("#rightBoneValues select").forEach((dbSelect) => {
-        dbSelect.value = "-";
-    });
-    document.querySelectorAll("#leftBoneValues select").forEach((dbSelect) => {
-        dbSelect.value = "-";
-    });
 
-    readForm();
-    updateChart();
-    localStorage.clear();
+    if( confirm("本当にすべてのデータを消去しますか？") ){
+        localStorage.clear();
+        window.location.reload(); // Refresh the page
+    }
 
-    let memo = document.getElementById("memo");
-    memo.value = '';
 }
 var clearBtn = document.getElementById("clearBtn");
 clearBtn.addEventListener("click", clear);
@@ -238,7 +217,7 @@ function readForm(){
         });
     });
 
-    console.log('readForm', audiogramData);
+    //console.log('readForm', audiogramData);
     localStorage.setItem("audiogramData", JSON.stringify(audiogramData));
 }
 function loadAudiogramData(){
@@ -253,33 +232,49 @@ function updateChart(){
     }
 
     let rightValues = audiogramData.right.map(function(thisValue){
-        //console.log('updateChart thing', thisValue);
-        if(thisValue.checked == true){
+        if(thisValue.scaleOut == true){
             return null;
         }
         return thisValue.frequency;
     });
-    let leftValues = audiogramData.right.map(function(thisValue){
-        //console.log('updateChart thing', thisValue);
-        if(thisValue.checked == true){
+    let leftValues = audiogramData.left.map(function(thisValue){
+        if(thisValue.scaleOut == true){
             return null;
         }
         return thisValue.frequency;
     });
+    let rightBoneValues = audiogramData.rightBone.map(function(thisValue){
+        if(thisValue.scaleOut == true){
+            return null;
+        }
+        return thisValue.frequency;
+    });
+    let leftBoneValues = audiogramData.leftBone.map(function(thisValue){
+        if(thisValue.scaleOut == true){
+            return null;
+        }
+        return thisValue.frequency;
+    });
+
+    // Since Bone values start at 250, and not 125
+    // We need to offset the list of values by +1
+    // Adds "null" as the first value of the list
+    rightBoneValues.unshift(null);
+    leftBoneValues.unshift(null);
     
     // Update the chart
-    // audiogramChart.data.datasets[0].data = audiogramData.right;
     audiogramChart.data.datasets[0].data = rightValues;
     audiogramChart.data.datasets[1].data = leftValues;
-    audiogramChart.data.datasets[2].data = audiogramData.rightBone;
-    audiogramChart.data.datasets[3].data = audiogramData.leftBone;
-
+    audiogramChart.data.datasets[2].data = rightBoneValues;
+    audiogramChart.data.datasets[3].data = leftBoneValues;
 
     audiogramChart.update();
 }
 
-
 init();
+
+
+
 
 function sampleData() {
     let rightInputs = document.querySelectorAll('#rightValues .dbCell');
