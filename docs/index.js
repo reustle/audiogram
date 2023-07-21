@@ -69,7 +69,7 @@ function init() {
                 data: [],
                 borderColor: 'rgba(255, 100, 100, 1)',
                 //If true, lines will be drawn between points with no or null data.
-                spanGaps: true,
+                spanGaps: false,
                 pointStyle: 'circle',
                 pointRadius: 10,
                 pointHoverRadius: 15,
@@ -78,7 +78,7 @@ function init() {
                 label: 'Left',
                 data: [],
                 borderColor: 'rgba(15, 10, 222, 1)',
-                spanGaps: true,
+                spanGaps: false,
                 pointStyle: 'crossRot',
                 pointRadius: 10,
                 pointHoverRadius: 15,
@@ -86,7 +86,7 @@ function init() {
             {
                 label: 'RightBone',
                 data: [],
-                spanGaps: true,
+                spanGaps: false,
                 showLine:false,
                 pointStyle: [pointImageR],
                 pointRadius: 10,
@@ -96,7 +96,7 @@ function init() {
             {
                 label: 'LeftBone',
                 data: [],
-                spanGaps: true,
+                spanGaps: false,
                 showLine:false,
                 pointStyle: [pointImageL],
                 pointRadius: 10,
@@ -264,8 +264,20 @@ function updateChart(){
     if(!audiogramData){
         return;
     }
+
+    // audiogramData.right = 
+    console.log(audiogramData.right.map(function(thing){
+        console.log(thing)
+        if(thing.checked == true){
+            return null
+        }
+        return thing.frequency
+    }))
+    console.log(audiogramData.right)
+    
     // Update the chart
-    audiogramChart.data.datasets[0].data = audiogramData.right;
+    // audiogramChart.data.datasets[0].data = audiogramData.right;
+    audiogramChart.data.datasets[0].data =[20, 20, 25, null, 30, 30];
     audiogramChart.data.datasets[1].data = audiogramData.left;
     audiogramChart.data.datasets[2].data = audiogramData.rightBone;
     audiogramChart.data.datasets[3].data = audiogramData.leftBone;
