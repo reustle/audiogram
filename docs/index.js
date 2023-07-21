@@ -1,21 +1,22 @@
 let audiogramChart;
 
 function init() {
-    // Add dB options to each dropdown
-    // Load the data from localStroage (if it is available)
-    let audiogramData = loadAudiogramData();
+    
+    // Prepare our bone images
     const pointImageL = new Image(20,20);
     pointImageL.src = 'https://github.com/Harukka/audiogram/blob/main/docs/left_bone.png?raw=true';
     const pointImageR = new Image(20,20);
     pointImageR.src = 'https://github.com/Harukka/audiogram/blob/main/docs/right_bone.png?raw=true';
-        
-
-    document.querySelectorAll('#rightValues select,#leftValues select,#rightBoneValues select, #leftBoneValues select').forEach( (dbSelector, dbSelectorIndex) => {
+    
+    // Add dB options to each dropdown
+    // Load the data from localStroage if it is available
+    let audiogramData = loadAudiogramData();
+    document.querySelectorAll('.frequencyInput').forEach( (dbSelector, dbSelectorIndex) => {
         //Make None Option '-'
         let defaultNoneOption = document.createElement("option");
         defaultNoneOption.innerHTML = "-";
         dbSelector.appendChild(defaultNoneOption)
-
+        
         // Make an <option> element for each dB level
         for (let i = -10; i <= 120; i = i + 5) {
             let option = document.createElement("option");
@@ -23,41 +24,51 @@ function init() {
             option.innerHTML = i;
             dbSelector.appendChild(option);
         }
-        
-        })
 
-        // If there is a dB value for this ear + this frequency in localstorage,
-        // we should set this dbSelector.value as that value
-        
-        if(audiogramData){
-            document.querySelectorAll("#rightValues select").forEach((dbSelect, dbSelectIndex) => {
-                let foundRightDbValue = audiogramData.right[dbSelectIndex];
-                if (foundRightDbValue && foundRightDbValue !== "-") {
-                    dbSelect.value = foundRightDbValue;
-                }
-            });
-            document.querySelectorAll("#leftValues select").forEach((dbSelect, dbSelectIndex) => {
-                let foundLeftDbValue = audiogramData.left[dbSelectIndex];
-                if (foundLeftDbValue && foundLeftDbValue !== "-") {
-                    dbSelect.value = foundLeftDbValue;
-                }
-            });
-            document.querySelectorAll("#rightBoneValues select").forEach((dbSelect, dbSelectIndex) => {
-                let foundRightBoneDbValue = audiogramData.rightBone[dbSelectIndex];
-                if (foundRightBoneDbValue && foundRightBoneDbValue !== "-") {
-                    dbSelect.value = foundRightBoneDbValue;
-                }
-            });
-            document.querySelectorAll("#leftBoneValues select").forEach((dbSelect, dbSelectIndex) => {
-                let foundLeftBoneDbValue = audiogramData.leftBone[dbSelectIndex];
-                if (foundLeftBoneDbValue && foundLeftBoneDbValue !== "-") {
-                    dbSelect.value = foundLeftBoneDbValue;
-                }
-            });
-            
-            document.getElementById("memo").value = audiogramData.memo;
+    })
 
-        }
+    // If there is a dB value for this ear + this frequency in localstorage,
+    // we should set this dbSelector.value as that value
+    if(audiogramData){
+        let unusedVar = ['right', 'left', 'rightBone', 'leftBone'].forEach(ear => {
+            document.querySelectorAll(`#${ear}Values .dbCell`).forEach((dbCell, dbCellIndex) => {
+                let dbSelect = dbCell.querySelector(".frequencyInput");
+                let scaleOutSelect = dbCell.querySelector(".scaleOutInput");
+
+                let foundDbValue = audiogramData[ear][dbCellIndex].frequency;
+                if (foundDbValue && foundDbValue !== "-") {
+                    dbSelect.value = foundDbValue;
+                }
+
+                let foundScaleOutValue = audiogramData[ear][dbCellIndex].scaleOut;
+                if (foundScaleOutValue) {
+                    scaleOutSelect.checked = true;
+                }
+            });
+        });
+
+        // document.querySelectorAll("#leftValues select").forEach((dbSelect, dbSelectIndex) => {
+        //     let foundLeftDbValue = audiogramData.left[dbSelectIndex].frequency;
+        //     if (foundLeftDbValue && foundLeftDbValue !== "-") {
+        //         dbSelect.value = foundLeftDbValue;
+        //     }
+        // });
+        // document.querySelectorAll("#rightBoneValues select").forEach((dbSelect, dbSelectIndex) => {
+        //     let foundRightBoneDbValue = audiogramData.rightBone[dbSelectIndex].frequency;
+        //     if (foundRightBoneDbValue && foundRightBoneDbValue !== "-") {
+        //         dbSelect.value = foundRightBoneDbValue;
+        //     }
+        // });
+        // document.querySelectorAll("#leftBoneValues select").forEach((dbSelect, dbSelectIndex) => {
+        //     let foundLeftBoneDbValue = audiogramData.leftBone[dbSelectIndex].frequency;
+        //     if (foundLeftBoneDbValue && foundLeftBoneDbValue !== "-") {
+        //         dbSelect.value = foundLeftBoneDbValue;
+        //     }
+        // });
+        
+        document.getElementById("memo").value = audiogramData.memo;
+
+    }
 
     var ctx = document.getElementById('chart').getContext("2d");
 
@@ -210,49 +221,25 @@ function updateClickedPointWithImage(index, imagePath) {
 
 function readForm(){
     // Load the data from the form and save it
-    let rightEarData = [];
-    let leftEarData = [];
-    let rightBoneData = [{frequency :'-',checked:false}];
-    let leftBoneData = [{frequency :'-',checked:false}];
-    
-    //Dictionary ですか？
-    document.querySelectorAll('#rightValues select :checked , input[type="checkbox"]:checked').forEach(rightEarInputs => {
-        rightEarData.push({
-            frequency: rightEarInputs.innerHTML, 
-            checked: rightEarInputs.checked? true:false
-        });
-    })
-    console.log(rightEarData)
-    document.querySelectorAll('#leftValues select :checked, input[type="checkbox"]:checked').forEach(leftEarInputs => {
-        leftEarData.push({
-            frequency:leftEarInputs.innerHTML,
-            checked:leftEarInputs.checked? true:false
-        });
-    })
-    document.querySelectorAll('#rightBoneValues select :checked, input[type="checkbox"]:checked').forEach(rightBoneInputs => {
-        rightBoneData.push({
-            frequency:rightBoneInputs.innerHTML,
-            checked:rightBoneInputs.checked? true:false
-        });
-    })
-    document.querySelectorAll('#leftBoneValues select :checked, input[type="checkbox"]:checked').forEach(leftBoneInputs => {
-        leftBoneData.push({
-            frequency:leftBoneInputs.innerHTML,
-            checked:leftBoneInputs.checked? true:false
-        });
-    })
-    console.log(leftBoneData)
-    let memo = document.getElementById("memo").value;
 
     let audiogramData = {
-        left : leftEarData,
-        right : rightEarData,
-        rightBone : rightBoneData,
-        leftBone : leftBoneData,
-        memo : memo 
+        left: [],
+        right: [],
+        rightBone: [],
+        leftBone: [],
+        memo: document.getElementById("memo").value
     }
-    localStorage.setItem("audiogramData", JSON.stringify(audiogramData));
+    let unusedVar = ['left', 'right', 'leftBone', 'rightBone'].map(ear => {
+        document.querySelectorAll(`#${ear}Values .dbCell`).forEach(earInputs => {
+            audiogramData[ear].push({
+                frequency: earInputs.querySelector('.frequencyInput').value,
+                scaleOut: earInputs.querySelector('.scaleOutInput').checked? true:false
+            });
+        });
+    });
 
+    console.log('readForm', audiogramData);
+    localStorage.setItem("audiogramData", JSON.stringify(audiogramData));
 }
 function loadAudiogramData(){
     return JSON.parse(localStorage.getItem("audiogramData"));
@@ -265,20 +252,25 @@ function updateChart(){
         return;
     }
 
-    // audiogramData.right = 
-    console.log(audiogramData.right.map(function(thing){
-        console.log(thing)
-        if(thing.checked == true){
-            return null
+    let rightValues = audiogramData.right.map(function(thisValue){
+        //console.log('updateChart thing', thisValue);
+        if(thisValue.checked == true){
+            return null;
         }
-        return thing.frequency
-    }))
-    console.log(audiogramData.right)
+        return thisValue.frequency;
+    });
+    let leftValues = audiogramData.right.map(function(thisValue){
+        //console.log('updateChart thing', thisValue);
+        if(thisValue.checked == true){
+            return null;
+        }
+        return thisValue.frequency;
+    });
     
     // Update the chart
     // audiogramChart.data.datasets[0].data = audiogramData.right;
-    audiogramChart.data.datasets[0].data =[20, 20, 25, null, 30, 30];
-    audiogramChart.data.datasets[1].data = audiogramData.left;
+    audiogramChart.data.datasets[0].data = rightValues;
+    audiogramChart.data.datasets[1].data = leftValues;
     audiogramChart.data.datasets[2].data = audiogramData.rightBone;
     audiogramChart.data.datasets[3].data = audiogramData.leftBone;
 
@@ -287,6 +279,27 @@ function updateChart(){
 }
 
 
-
-
 init();
+
+function sampleData() {
+    let rightInputs = document.querySelectorAll('#rightValues .dbCell');
+    let leftInputs = document.querySelectorAll('#leftValues .dbCell');
+    let rightBoneInputs = document.querySelectorAll('#rightBoneValues .dbCell');
+    let leftBoneInputs = document.querySelectorAll('#leftBoneValues .dbCell');
+
+    // Right ear
+    rightInputs.forEach((rightInput, index) => {
+        let frequency = rightInput.querySelector('.frequencyInput');
+        let scaleOut = rightInput.querySelector('.scaleOutInput');
+        frequency.value = 10 * (index + 1);
+        scaleOut.checked = false;
+    });
+
+    // Left ear
+    leftInputs.forEach((leftInput, index) => {
+        let frequency = leftInput.querySelector('.frequencyInput');
+        let scaleOut = leftInput.querySelector('.scaleOutInput');
+        frequency.value = 10 * (index + 1);
+        scaleOut.checked = false;
+    });
+}
