@@ -1,12 +1,13 @@
 let audiogramChart;
 
+// Prepare our bone images
+const leftImage = new Image(20,20);
+leftImage.src = '/public/img/leftBone.png';
+const rightImage = new Image(20,20);
+rightImage.src = '/public/img/rightBone.png';
+
 function init() {
     
-    // Prepare our bone images
-    const pointImageL = new Image(20,20);
-    pointImageL.src = '/public/img/left_bone.png';
-    const pointImageR = new Image(20,20);
-    pointImageR.src = '/public/img/right_bone.png';
     
     // Add dB options to each dropdown
     // Load the data from localStroage if it is available
@@ -61,8 +62,8 @@ function init() {
                 data: [],
                 borderColor: 'rgba(255, 100, 100, 1)',
                 //If true, lines will be drawn between points with no or null data.
-                spanGaps: false,
-                pointStyle: 'circle',
+                spanGaps: true,
+                pointStyle: ['circle'],
                 pointRadius: 10,
                 pointHoverRadius: 15,
             },
@@ -80,7 +81,7 @@ function init() {
                 data: [],
                 spanGaps: false,
                 showLine:false,
-                pointStyle: [pointImageR],
+                pointStyle: [rightImage],
                 pointRadius: 10,
                 pointHoverRadius: 15,
              
@@ -90,7 +91,7 @@ function init() {
                 data: [],
                 spanGaps: false,
                 showLine:false,
-                pointStyle: [pointImageL],
+                pointStyle: [leftImage],
                 pointRadius: 10,
                 pointHoverRadius: 15,
             }            
@@ -104,7 +105,7 @@ function init() {
         options: {
             elements:{
                 point:{
-                    pointStyle:[pointImageL, pointImageR],
+                    pointStyle:[leftImage, rightImage],
                 }
             },
             plugins:{
@@ -115,6 +116,8 @@ function init() {
                     }
                 }
             },
+
+
             onClick: (e) => {
                 console.log('mapClick', e);
             },
@@ -181,7 +184,6 @@ function updateClickedPointWithImage(index, imagePath) {
     myChart.update();
 }
 
-
 function readForm(){
     // Load the data from the form and save it
 
@@ -245,12 +247,25 @@ function updateChart(){
     // Adds "null" as the first value of the list
     rightBoneValues.unshift(null);
     leftBoneValues.unshift(null);
+
+    console.log(rightValues);
+ 
     
     // Update the chart
     audiogramChart.data.datasets[0].data = rightValues;
     audiogramChart.data.datasets[1].data = leftValues;
     audiogramChart.data.datasets[2].data = rightBoneValues;
     audiogramChart.data.datasets[3].data = leftBoneValues;
+    
+    console.log(audiogramChart.data.datasets[0])
+    audiogramChart.data.datasets[0].data.forEach((value,valueIndex) =>{
+        console.log(value)
+        if(value == null){
+            audiogramChart.data.datasets[0].pointStyle[valueIndex] = leftImage
+        }
+    })
+    console.log(audiogramChart.data.datasets[0])
+
 
     audiogramChart.update();
 }
