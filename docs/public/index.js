@@ -1,10 +1,24 @@
 let audiogramChart;
 
 // Prepare our bone images
-const leftImage = new Image(20,20);
-leftImage.src = '/public/img/leftBone.png';
-const rightImage = new Image(20,20);
-rightImage.src = '/public/img/rightBone.png';
+
+const leftImage = new Image(30,30);
+leftImage.src = '/public/img/left.png';
+const rightImage = new Image(30,30);
+rightImage.src = '/public/img/right.png';
+const lScaleOutImage = new Image(30,30);
+lScaleOutImage.src = '/public/img/leftScaleOut.png';
+const rScaleOutImage = new Image(30,30);
+rScaleOutImage.src = '/public/img/rightScaleOut.png';
+const leftBoneImage = new Image(30,30);
+leftBoneImage.src = '/public/img/leftBone.png';
+const rightBoneImage = new Image(30,30);
+rightBoneImage.src = '/public/img/rightBone.png';
+const lBoneScaleOutImage = new Image(30,30);
+lBoneScaleOutImage.src = '/public/img/leftBoneScaleOut.png';
+const rBoneScaleOutImage = new Image(30,30);
+rBoneScaleOutImage.src = '/public/img/rightBoneScaleOut.png';
+
 
 function init() {
     
@@ -63,7 +77,8 @@ function init() {
                 borderColor: 'rgba(255, 100, 100, 1)',
                 //If true, lines will be drawn between points with no or null data.
                 spanGaps: true,
-                pointStyle: ['circle'],
+                showLine:true,
+                pointStyle: [rightImage],
                 pointRadius: 10,
                 pointHoverRadius: 15,
             },
@@ -71,8 +86,9 @@ function init() {
                 label: 'Left',
                 data: [],
                 borderColor: 'rgba(15, 10, 222, 1)',
-                spanGaps: false,
-                pointStyle: 'crossRot',
+                spanGaps: true,
+                showLine:true,
+                pointStyle: [leftImage],
                 pointRadius: 10,
                 pointHoverRadius: 15,
             },
@@ -81,7 +97,7 @@ function init() {
                 data: [],
                 spanGaps: false,
                 showLine:false,
-                pointStyle: [rightImage],
+                pointStyle: [rightBoneImage],
                 pointRadius: 10,
                 pointHoverRadius: 15,
              
@@ -91,7 +107,7 @@ function init() {
                 data: [],
                 spanGaps: false,
                 showLine:false,
-                pointStyle: [leftImage],
+                pointStyle: [leftBoneImage],
                 pointRadius: 10,
                 pointHoverRadius: 15,
             }            
@@ -105,7 +121,12 @@ function init() {
         options: {
             elements:{
                 point:{
-                    pointStyle:[leftImage, rightImage],
+                    pointStyle:[
+                        rightImage,
+                        leftImage,
+                        leftBoneImage,
+                        rightBoneImage
+                    ],
                 }
             },
             plugins:{
@@ -216,29 +237,17 @@ function updateChart(){
     if(!audiogramData){
         return;
     }
-
+    console.log(audiogramData.right)
     let rightValues = audiogramData.right.map(function(thisValue){
-        if(thisValue.scaleOut == true){
-            return null;
-        }
         return thisValue.frequency;
     });
     let leftValues = audiogramData.left.map(function(thisValue){
-        if(thisValue.scaleOut == true){
-            return null;
-        }
         return thisValue.frequency;
     });
     let rightBoneValues = audiogramData.rightBone.map(function(thisValue){
-        if(thisValue.scaleOut == true){
-            return null;
-        }
         return thisValue.frequency;
     });
     let leftBoneValues = audiogramData.leftBone.map(function(thisValue){
-        if(thisValue.scaleOut == true){
-            return null;
-        }
         return thisValue.frequency;
     });
 
@@ -247,25 +256,51 @@ function updateChart(){
     // Adds "null" as the first value of the list
     rightBoneValues.unshift(null);
     leftBoneValues.unshift(null);
-
-    console.log(rightValues);
- 
     
+    //set scaleout image when scaleout is checked
+    audiogramChart.data.datasets[0].data = audiogramData.right.map(function(thisValue, index){
+        if(thisValue.scaleOut == true){
+            return audiogramChart.data.datasets[0].pointStyle[index] = rScaleOutImage;
+            //TODO i want disconnect 
+            //  audiogramChart.data.datasets[0].showLine[index] = false  
+        }else{
+            return audiogramChart.data.datasets[0].pointStyle[index] = rightImage;
+        }
+    })
+    audiogramChart.data.datasets[1].data = audiogramData.left.map(function(thisValue, index){
+        if(thisValue.scaleOut == true){
+            return audiogramChart.data.datasets[1].pointStyle[index] = lScaleOutImage;
+            //TODO i want disconnect 
+            //  audiogramChart.data.datasets[0].showLine[index] = false  
+        }else{
+            return audiogramChart.data.datasets[1].pointStyle[index] = leftImage;
+        }
+    })
+    audiogramChart.data.datasets[2].data = audiogramData.rightBone.map(function(thisValue, index){
+        if(thisValue.scaleOut == true){
+            return audiogramChart.data.datasets[2].pointStyle[index] = rBoneScaleOutImage;
+            //TODO i want disconnect and offset
+            //  audiogramChart.data.datasets[2].showLine[index] = false  
+        }else{
+            return audiogramChart.data.datasets[2].pointStyle[index] = rightBoneImage;
+        }
+    })
+    audiogramChart.data.datasets[3].data = audiogramData.leftBone.map(function(thisValue, index){
+        if(thisValue.scaleOut == true){
+            return audiogramChart.data.datasets[3].pointStyle[index] = lBoneScaleOutImage;
+            //TODO i want disconnect and offset
+            //  audiogramChart.data.datasets[0].showLine[index] = false  
+        }else{
+            return audiogramChart.data.datasets[3].pointStyle[index] = leftBoneImage;
+        }
+    })
+
+
     // Update the chart
     audiogramChart.data.datasets[0].data = rightValues;
     audiogramChart.data.datasets[1].data = leftValues;
     audiogramChart.data.datasets[2].data = rightBoneValues;
     audiogramChart.data.datasets[3].data = leftBoneValues;
-    
-    console.log(audiogramChart.data.datasets[0])
-    audiogramChart.data.datasets[0].data.forEach((value,valueIndex) =>{
-        console.log(value)
-        if(value == null){
-            audiogramChart.data.datasets[0].pointStyle[valueIndex] = leftImage
-        }
-    })
-    console.log(audiogramChart.data.datasets[0])
-
 
     audiogramChart.update();
 }
