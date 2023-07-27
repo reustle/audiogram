@@ -67,7 +67,6 @@ function init() {
     }
 
     var ctx = document.getElementById('chart').getContext("2d");
-
     var data = {
         labels: ["125", "250", "500", "750", "1000", "1500", "2000", "3000", "4000", "6000", "8000"],
         datasets: [
@@ -81,6 +80,7 @@ function init() {
                 pointStyle: [rightImage],
                 pointRadius: 10,
                 pointHoverRadius: 15,
+                borderWidth: 1
             },
             {
                 label: 'Left',
@@ -91,6 +91,7 @@ function init() {
                 pointStyle: [leftImage],
                 pointRadius: 10,
                 pointHoverRadius: 15,
+                borderWidth: 1
             },
             {
                 label: 'RightBone',
@@ -131,11 +132,15 @@ function init() {
             },
             plugins:{
                 legend:{
+                    display:false,
                     position:'top',
                     labels:{
                         usePointStyle: true,
                     }
                 }
+            },
+            layout:{
+                padding:50
             },
 
 
@@ -166,8 +171,8 @@ function init() {
                         stepSize: 10,
                         autoSkip: false
                     }
-                },
-            }
+                }
+            },                
         }
     });
     // Draw the chart, if there is data in localstorage
@@ -198,7 +203,9 @@ function clear(){
 var clearBtn = document.getElementById("clearBtn");
 clearBtn.addEventListener("click", clear);
 
-// Function to update the properties of the clicked point with an image
+// TODO Function to disconnect the data point from the chart
+
+//Function to update the properties of the clicked point with an image
 function updateClickedPointWithImage(index, imagePath) {
     myChart.data.datasets[0].pointStyle[index] = 'image';
     myChart.data.datasets[0].pointStyleImage[index] = imagePath;
@@ -261,8 +268,7 @@ function updateChart(){
     audiogramChart.data.datasets[0].data = audiogramData.right.map(function(thisValue, index){
         if(thisValue.scaleOut == true){
             return audiogramChart.data.datasets[0].pointStyle[index] = rScaleOutImage;
-            //TODO i want disconnect 
-            //  audiogramChart.data.datasets[0].showLine[index] = false  
+            //TODO disconnect      
         }else{
             return audiogramChart.data.datasets[0].pointStyle[index] = rightImage;
         }
@@ -270,8 +276,7 @@ function updateChart(){
     audiogramChart.data.datasets[1].data = audiogramData.left.map(function(thisValue, index){
         if(thisValue.scaleOut == true){
             return audiogramChart.data.datasets[1].pointStyle[index] = lScaleOutImage;
-            //TODO i want disconnect 
-            //  audiogramChart.data.datasets[0].showLine[index] = false  
+            //TODO disconnect 
         }else{
             return audiogramChart.data.datasets[1].pointStyle[index] = leftImage;
         }
@@ -279,28 +284,33 @@ function updateChart(){
     audiogramChart.data.datasets[2].data = audiogramData.rightBone.map(function(thisValue, index){
         if(thisValue.scaleOut == true){
             return audiogramChart.data.datasets[2].pointStyle[index] = rBoneScaleOutImage;
-            //TODO i want disconnect and offset
-            //  audiogramChart.data.datasets[2].showLine[index] = false  
+            //TODO disconnect 
+        
         }else{
             return audiogramChart.data.datasets[2].pointStyle[index] = rightBoneImage;
         }
     })
     audiogramChart.data.datasets[3].data = audiogramData.leftBone.map(function(thisValue, index){
         if(thisValue.scaleOut == true){
+            
             return audiogramChart.data.datasets[3].pointStyle[index] = lBoneScaleOutImage;
-            //TODO i want disconnect and offset
-            //  audiogramChart.data.datasets[0].showLine[index] = false  
+            //TODO  disconnect 
         }else{
             return audiogramChart.data.datasets[3].pointStyle[index] = leftBoneImage;
         }
     })
-
+    // Since Bone values start at 250, and not 125
+    // We need to offset the list of values by +1
+    // Adds "null" as the first value of the pointStyle's list
+    audiogramChart.data.datasets[2].pointStyle.unshift(null);
+    audiogramChart.data.datasets[3].pointStyle.unshift(null);
 
     // Update the chart
     audiogramChart.data.datasets[0].data = rightValues;
     audiogramChart.data.datasets[1].data = leftValues;
     audiogramChart.data.datasets[2].data = rightBoneValues;
     audiogramChart.data.datasets[3].data = leftBoneValues;
+    console.log(audiogramChart.data.datasets[0])
 
     audiogramChart.update();
 }

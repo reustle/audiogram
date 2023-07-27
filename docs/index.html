@@ -16,18 +16,27 @@
 </head>
 
 <body>
-    <div class="container-sm">
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+        <h5 class="my-0 mr-md-auto font-weight-normal">Audiogram Maker</h5>
+        <nav class="my-2 my-md-0 mr-md-3 print_none">
+            <a class="p-3 text-dark" href="#">Home</a>
+            <a class="p-3 text-dark" href="#">##########</a>
+            <a class="p-3 text-dark" href="#">##########</a>
+            <a class="p-3 text-dark" href="#">##########</a>
+        </nav>
+    </div>
+    <div class="container-md">
         <div class="row print_none">
-            <p>
+            <p class="col-sm-6 col-md-11">
                 Hearing Test Result
             </p>
-            <form>
-                <input type="button" value="Print / PDF" onclick="window.print();" class="btn btn-outline-primary">
+            <form class="col-sm-6 col-md-1">
+                <input type="button" value="Print / PDF" onclick="window.print();" class="btn btn-outline-secondary btn-sm">
             </form>        
         </div>
-        <table class="table">
+        <table class="table print_none">
             <thead>
-                <p>気導 / AIR CONDUCTION</p>
+                <p class="print_none">▼気導 / AIR CONDUCTION</p>
                 <tr>
                     <th scope="col">気導</th>
                     <th scope="col">125</th>
@@ -140,9 +149,9 @@
             </tr>
                 
         </table>
-        <details>
-            <summary>骨導/BONE CONDUCTION</summary>
-            <table class="table">
+        <details class="print_none">
+            <summary>骨導/BONE CONDUCTION (masked)</summary>
+            <table class="table-responsive-md">
                 <thead>
                     <tr>
                         <th scope="col">骨導</th>
@@ -234,9 +243,9 @@
             <textarea class="form-control" id="memo" rows="1"></textarea>
         </div>            
         <!-- updateBtn -->
-        <input class="print_none btn btn-outline-primary btn-lg" type="button" value="更新/Update" id="updateBtn" />
+        <input class="print_none btn btn-outline-primary " type="button" value="更新/Update" id="updateBtn" />
         <!-- clearBtn -->
-        <input class="print_none btn btn-outline-primary btn-lg" type="button" value="データ削除/Clear Data" id="clearBtn" onClick="clear()" />
+        <input class="print_none btn btn-outline-primary " type="button" value="データ削除/Clear Data" id="clearBtn" onClick="clear()" />
         
     </div>
     <div class="chart-container" >
