@@ -144,9 +144,9 @@ function init() {
             },
 
 
-            onClick: (e) => {
-                console.log('mapClick', e);
-            },
+            // onClick: (e) => {
+            //     console.log('mapClick', e);
+            // },
             responsive: false,
             layout: {
                 padding: 50
@@ -211,6 +211,7 @@ function updateClickedPointWithImage(index, imagePath) {
     myChart.data.datasets[0].pointStyleImage[index] = imagePath;
     myChart.update();
 }
+
 
 function readForm(){
     // Load the data from the form and save it
