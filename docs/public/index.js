@@ -276,8 +276,7 @@ function updateChart(){
     })
     audiogramChart.data.datasets[1].data = audiogramData.left.map(function(thisValue, index){
         if(thisValue.scaleOut == true){
-            return audiogramChart.data.datasets[1].pointStyle[index] = lScaleOutImage;
-            //TODO disconnect 
+            return audiogramChart.data.datasets[1].pointStyle[index] = lScaleOutImage; 
         }else{
             return audiogramChart.data.datasets[1].pointStyle[index] = leftImage;
         }
@@ -285,15 +284,12 @@ function updateChart(){
     audiogramChart.data.datasets[2].data = audiogramData.rightBone.map(function(thisValue, index){
         if(thisValue.scaleOut == true){
             return audiogramChart.data.datasets[2].pointStyle[index] = rBoneScaleOutImage;
-            //TODO disconnect 
-        
         }else{
             return audiogramChart.data.datasets[2].pointStyle[index] = rightBoneImage;
         }
     })
     audiogramChart.data.datasets[3].data = audiogramData.leftBone.map(function(thisValue, index){
         if(thisValue.scaleOut == true){
-            
             return audiogramChart.data.datasets[3].pointStyle[index] = lBoneScaleOutImage;
             //TODO  disconnect 
         }else{

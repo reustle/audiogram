@@ -17,3 +17,8 @@
         appearance: none;
       }
 }
+@page {
+
+    margin : 5mm 5mm;
+    size: A4 portrait;
+}
