@@ -75,22 +75,18 @@ function init() {
                 data: [],
                 borderColor: 'rgba(255, 100, 100, 1)',
                 //If true, lines will be drawn between points with no or null data.
-                spanGaps: true,
+                spanGaps: false,
                 showLine:true,
                 pointStyle: [rightImage],
-                pointRadius: 10,
-                pointHoverRadius: 15,
                 borderWidth: 1
             },
             {
                 label: 'Left',
                 data: [],
                 borderColor: 'rgba(15, 10, 222, 1)',
-                spanGaps: true,
+                spanGaps: false,
                 showLine:true,
                 pointStyle: [leftImage],
-                pointRadius: 10,
-                pointHoverRadius: 15,
                 borderWidth: 1
             },
             {
@@ -99,9 +95,6 @@ function init() {
                 spanGaps: false,
                 showLine:false,
                 pointStyle: [rightBoneImage],
-                pointRadius: 10,
-                pointHoverRadius: 15,
-             
             },
             {
                 label: 'LeftBone',
@@ -109,8 +102,26 @@ function init() {
                 spanGaps: false,
                 showLine:false,
                 pointStyle: [leftBoneImage],
-                pointRadius: 10,
-                pointHoverRadius: 15,
+            },
+            {
+                label: 'RightScaleOut',
+                data: [],
+                borderColor: 'rgba(255, 100, 100, 1)',
+                //If true, lines will be drawn between points with no or null data.
+                spanGaps: false,
+                showLine:false,
+                pointStyle: [rScaleOutImage],
+                borderWidth: 1
+            },
+            {
+                label: 'LeftScaleOut',
+                data: [],
+                borderColor: 'rgba(255, 100, 100, 1)',
+                //If true, lines will be drawn between points with no or null data.
+                spanGaps: false,
+                showLine:false,
+                pointStyle: [lScaleOutImage],
+                borderWidth: 1
             }            
         ]
     };
@@ -139,11 +150,6 @@ function init() {
                     }
                 }
             },
-            layout:{
-                padding:50
-            },
-
-
             // onClick: (e) => {
             //     console.log('mapClick', e);
             // },
@@ -153,20 +159,23 @@ function init() {
             },
             scales: {
                 x: {
+                    offset :true,
                     title:{
                         display: true,
-                        text: '音の高さ：周波数(Hz) / Pitch in Hertz(Hz)'
+                        text: '音の高さ：周波数(Hz) / Pitch in Hertz(Hz)',
+
                     }                        
                 },
                 y: {
+                    offset :true,
                     title: {
                         display: true,
                         text: '音の大きさ：聴力レベル(dB) / Hearing Level in Decibels(dB)'
                     },
                     //top 0 -> bottom 120
                     reverse: true,
-                    min: -10,
-                    max: 120,
+                    // min: -10,
+                    // max: 120,
                     ticks: {
                         stepSize: 10,
                         autoSkip: false
@@ -216,9 +225,9 @@ function updateClickedPointWithImage(index, imagePath) {
 function readForm(){
     // Load the data from the form and save it
 
-    let audiogramData = {
-        left: [],
+    let audiogramData = {        
         right: [],
+        left: [],
         rightBone: [],
         leftBone: [],
         memo: document.getElementById("memo").value
@@ -265,22 +274,41 @@ function updateChart(){
     rightBoneValues.unshift(null);
     leftBoneValues.unshift(null);
     
-    //set scaleout image when scaleout is checked
+    let rScaleOutValues = [];
+    let lScaleOutValues = [];
+    //set null when scaleout is checked
     audiogramChart.data.datasets[0].data = audiogramData.right.map(function(thisValue, index){
         if(thisValue.scaleOut == true){
-            return audiogramChart.data.datasets[0].pointStyle[index] = rScaleOutImage;
-            //TODO disconnect      
-        }else{
+            return rightValues[index] = null;      
+        }
+        else{
             return audiogramChart.data.datasets[0].pointStyle[index] = rightImage;
+        }
+    })
+    //make data of (right)scaleout 
+    audiogramChart.data.datasets[0].data = audiogramData.right.map(function(thisValue, index){
+        if(thisValue.scaleOut == true){
+            return rScaleOutValues[index] = thisValue.frequency;
+        }else{
+            return rScaleOutValues[index] = null;
         }
     })
     audiogramChart.data.datasets[1].data = audiogramData.left.map(function(thisValue, index){
         if(thisValue.scaleOut == true){
-            return audiogramChart.data.datasets[1].pointStyle[index] = lScaleOutImage; 
+            return leftValues[index] = null;
         }else{
             return audiogramChart.data.datasets[1].pointStyle[index] = leftImage;
         }
     })
+    //make data of (left)scaleout 
+    audiogramChart.data.datasets[1].data = audiogramData.left.map(function(thisValue, index){
+        if(thisValue.scaleOut == true){
+            return lScaleOutValues[index] = thisValue.frequency;
+        }else{
+            return lScaleOutValues[index] = null;
+        }
+    })
+    
     audiogramChart.data.datasets[2].data = audiogramData.rightBone.map(function(thisValue, index){
         if(thisValue.scaleOut == true){
             return audiogramChart.data.datasets[2].pointStyle[index] = rBoneScaleOutImage;
@@ -307,6 +335,10 @@ function updateChart(){
     audiogramChart.data.datasets[1].data = leftValues;
     audiogramChart.data.datasets[2].data = rightBoneValues;
     audiogramChart.data.datasets[3].data = leftBoneValues;
+
+    audiogramChart.data.datasets[4].data = rScaleOutValues;
+    audiogramChart.data.datasets[5].data = lScaleOutValues;
+    
     console.log(audiogramChart.data.datasets[0])
 
     audiogramChart.update();
