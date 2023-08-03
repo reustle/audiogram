@@ -174,8 +174,8 @@ function init() {
                     },
                     //top 0 -> bottom 120
                     reverse: true,
-                    // min: -10,
-                    // max: 120,
+                    min: -10,
+                    max: 120,
                     ticks: {
                         stepSize: 10,
                         autoSkip: false
