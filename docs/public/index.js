@@ -21,7 +21,8 @@ rBoneScaleOutImage.src = '/public/img/rightBoneScaleOut.png';
 
 
 function init() {
-    
+    //show the date
+    document.getElementById("today").innerHTML = showDate();
     
     // Add dB options to each dropdown
     // Load the data from localStroage if it is available
@@ -212,15 +213,19 @@ function clear(){
 var clearBtn = document.getElementById("clearBtn");
 clearBtn.addEventListener("click", clear);
 
-// TODO Function to disconnect the data point from the chart
-
 //Function to update the properties of the clicked point with an image
 function updateClickedPointWithImage(index, imagePath) {
     myChart.data.datasets[0].pointStyle[index] = 'image';
     myChart.data.datasets[0].pointStyleImage[index] = imagePath;
     myChart.update();
 }
-
+function showDate(){
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = today.getMonth()+1;
+    let day = today.getDay();
+    return year + '/' + month + '/' + day;
+}
 
 function readForm(){
     // Load the data from the form and save it

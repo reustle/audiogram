@@ -8,11 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="/public/style.css">
-
     <title>Audiogram</title>
-    <!-- <style>
-            #chart {max-width:640px;max-height:480px;}
-        </style> -->
 </head>
 
 <body class="audiogram">
@@ -26,15 +22,15 @@
         </nav>
     </div>
     <div class="container-md">
-        <div class="row print_none">
+        <div class="row">
             <p class="col-sm-6 col-md-11">
-                Hearing Test Result
+                <span id="today"></span>
             </p>
-            <form class="col-sm-6 col-md-1">
+            <form class="col-sm-6 col-md-1 print_none">
                 <input type="button" value="Print / PDF" onclick="window.print();" class="btn btn-outline-secondary btn-sm">
             </form>        
         </div>
-        <table class="table print_none">
+        <table class="table print_none table-sm">
             <thead>
                 <p class="print_none">▼気導 / AIR CONDUCTION</p>
                 <tr>
@@ -151,7 +147,7 @@
         </table>
         <details class="print_none">
             <summary>骨導/BONE CONDUCTION (masked)</summary>
-            <table class="table">
+            <table class="table table-sm">
                 <thead>
                     <tr>
                         <th scope="col">骨導</th>
@@ -246,10 +242,41 @@
         <input class="print_none btn btn-outline-primary " type="button" value="更新/Update" id="updateBtn" />
         <!-- clearBtn -->
         <input class="print_none btn btn-outline-primary " type="button" value="データ削除/Clear Data" id="clearBtn" onClick="clear()" />
-        
-    </div>
-    <div class="chart-container" >
-        <canvas id="chart" width="700px" height="700px"></canvas>
+        <div class="chart-container" >
+            <canvas id="chart" width="700px" height="700px"></canvas>
+        </div>
+        <div class="row print_none">
+            <div class="col-sm-6">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        オージオグラムとは
+                    </div>
+                    <div class="card-body">
+                        オージオグラムは、聴力検査（測定）の結果をグラフで表したものです。聴力検査（測定）では、さまざまなピッチ（音の高さ）の音を聞いて、その音がどれくらい大きな音として聞こえるかを調べます。オージオグラムは、グラフの横軸に「音の高さ」（ヘルツ数）が、縦軸に「音の大きさ」（デシベル）が示されます。グラフの下に行くほど音が大きくなり、右に行くほど高い音を表しています。
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        Audiogram?
+                    </div>
+                    <div class="card-body">
+                        An audiogram is a graphical representation of the results obtained from a hearing test, also known as audiometric testing. It is a fundamental tool used by audiologists and healthcare professionals to assess a person's hearing ability. The test involves presenting sounds of different frequencies (pitches) and intensities (loudness) to the individual being tested.
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        Audiogram?
+                    </div>
+                    <div class="card-body">
+                        An audiogram is a graphical representation of the results obtained from a hearing test, also known as audiometric testing. It is a fundamental tool used by audiologists and healthcare professionals to assess a person's hearing ability. The test involves presenting sounds of different frequencies (pitches) and intensities (loudness) to the individual being tested.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js" ></script>
