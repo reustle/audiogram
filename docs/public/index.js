@@ -79,7 +79,8 @@ function init() {
                 spanGaps: false,
                 showLine:true,
                 pointStyle: [rightImage],
-                borderWidth: 1
+                borderWidth: 1,
+                order: 2,
             },
             {
                 label: 'Left',
@@ -88,7 +89,8 @@ function init() {
                 spanGaps: false,
                 showLine:true,
                 pointStyle: [leftImage],
-                borderWidth: 1
+                borderWidth: 1,
+                order: 1,
             },
             {
                 label: 'RightBone',
@@ -96,6 +98,7 @@ function init() {
                 spanGaps: false,
                 showLine:false,
                 pointStyle: [rightBoneImage],
+                order:3,
             },
             {
                 label: 'LeftBone',
@@ -103,6 +106,7 @@ function init() {
                 spanGaps: false,
                 showLine:false,
                 pointStyle: [leftBoneImage],
+                order:4,
             },
             {
                 label: 'RightScaleOut',
@@ -112,7 +116,8 @@ function init() {
                 spanGaps: false,
                 showLine:false,
                 pointStyle: [rScaleOutImage],
-                borderWidth: 1
+                borderWidth: 1,
+                order:5,
             },
             {
                 label: 'LeftScaleOut',
@@ -122,7 +127,8 @@ function init() {
                 spanGaps: false,
                 showLine:false,
                 pointStyle: [lScaleOutImage],
-                borderWidth: 1
+                borderWidth: 1,
+                order:6,
             }            
         ]
     };
