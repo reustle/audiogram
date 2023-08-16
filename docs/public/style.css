@@ -9,7 +9,7 @@
     background-color: var(--mediumGreen);
 }
 .navbar-title{
-    padding: 0.1 em;
+    padding: 8px;
     color: var(--white);
     text-decoration: none;
 }
