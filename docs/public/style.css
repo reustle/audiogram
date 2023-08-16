@@ -1,7 +1,29 @@
+:root{
+    --darkGreen: #164A41;
+    --mediumGreen: #4D774E;
+    --lightGreen: #9DC88D;
+    --naturalYellow: #F1B24A;
+    --white: #FFFFFF;
+}
+.navbar-whole {
+    background-color: var(--mediumGreen);
+}
+.navbar-title{
+    padding: 0.1 em;
+    color: var(--white);
+    text-decoration: none;
+}
+.navbar-title:hover{
+    color: var(--lightGreen);
+    text-decoration: none;
+}
+.row1{
+    margin-top: 0.5em;
+}
 .chart-container {
     position: relative;
     margin: auto;
-    height: 800px;
+    height: 700px;
     width: 800px;
 }
 @media print{
@@ -13,41 +35,57 @@
         -moz-appearance: none;
         appearance: none;
     }
-
 }
-.card-effect{
-    box-shadow: gray;
-    background-color: #fff;
-    padding: 25px;
-    transition: all 0.35 ease;
+.table{
+    width: 90%;
+    margin: auto;
 }
-.card-effect:hover{
-    box-shadow: none;
-    transform: translateY(5px)
+.form-control{
+    width: 90%;
+    margin: auto;
 }
-.cards{
-    position: relative;
-    z-index: 2;
-    overflow: hidden;
+.btn-update ,.btn-clear{
+    color: var(--mediumGreen);
+    background-color: var(--white);
+    border: 1.5px solid var(--mediumGreen);
+    transition : all .7s;
 }
-.cards::after{
-    content: "";
-    position: absolute;
-    top:-100%;
-    left: 0;
-    background-color: lightcyan;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0;
-    transition: all 0.4s ease;
+.btn-update:hover ,.btn-clear:hover{
+    background-color:var(--mediumGreen);
+    border-color: var(--white);
 }
-.cards:hover{
-    background-color: #fff;
-    color: lightcyan;
+.btn-update:focus ,.btn-clear:focus{
+    color: var(--white);
+    background-color:var(--mediumGreen);
+    border-color: var(--mediumGreen);
+    box-shadow: 0 0 0 0.25rem var(--lightGreen);
 }
-
-.cards:hover::after{
-    opacity: 1;
-    top: 0;
+.card{
+    background-color: var(--white);
+    border:1.5px solid var(--lightGreen);
+}
+.card-header{
+    color: var(--white);
+    background-color: var(--lightGreen );
+}
+.card-body{
+    color: var(--mediumGreen);
+}
+.legend {
+    border-collapse:inherit;
+    width: 60%;
+    padding: 0.4em 0.6em;
+    margin: 3.5em 0.4em;
+    color:var(--mediumGreen);/*文字色*/
+    background: #FFF;
+    border: solid 1.5px var(--lightGreen);/*線*/
+    border-radius: 6px;/*角の丸み*/
+    font-size: 80%;
+    cursor: default;
+}
+.legend tr {
+    text-align: center;
+}
+.legend td {
+    text-align: center;
 }
