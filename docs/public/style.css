@@ -17,6 +17,18 @@
     color: var(--lightGreen);
     text-decoration: none;
 }
+.nav-link {
+    color: var(--white) !important;
+}
+.btn-outline-success{
+    color: var(--white) !important;
+    border-color: var(--lightGreen) !important;
+}
+.btn-outline-success:hover{
+    color: var(--mediumGreen) !important;
+    background-color: var(--lightGreen)!important;
+    border-color: var(--lightGreen) !important;
+}
 .row1{
     margin-top: 0.5em;
 }
