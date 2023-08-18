@@ -22,18 +22,18 @@
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="index.html">Audiogram Maker オージオグラム作成</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="threshold.html">Threshold Test 閾値測定</a>
                   </li>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Dropdown
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="#">Action</a></li>
-                      <li><a class="dropdown-item" href="#">Another action</a></li>
+                      <li><a class="dropdown-item" href="threshold.html">Threshold Test 閾値測定</a></li>
+                      <li><a class="dropdown-item" href="index.html">Audiogram Maker オージオグラム作成</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
@@ -46,8 +46,8 @@
                 </form>
               </div>
             </div>
-          </nav>
-  <!-- Navbar -->
+        </nav>
+        <!-- Navbar -->
 
     <div class="container-md">
         <div class="row row1">
@@ -90,10 +90,6 @@
                     <select class="frequencyInput btn btn-light dropdown-toggle"></select><br>
                     <input type="checkbox" class="scaleOutInput btn btn-light"></input>
                 </td>
-                <td id="right500" class="dbCell">
-                    <select class="frequencyInput btn btn-light dropdown-toggle"></select><br>
-                    <input type="checkbox" class="scaleOutInput btn btn-light"></input>
-                </td>
                 <td id="right750" class="dbCell">
                     <select class="frequencyInput btn btn-light dropdown-toggle"></select><br>
                     <input type="checkbox" class="scaleOutInput btn btn-light"></input>
@@ -107,6 +103,10 @@
                     <input type="checkbox" class="scaleOutInput btn btn-light"></input>
                 </td>
                 <td id="right2000" class="dbCell">
+                    <select class="frequencyInput btn btn-light dropdown-toggle"></select><br>
+                    <input type="checkbox" class="scaleOutInput btn btn-light"></input>
+                </td>
+                <td id="right3000" class="dbCell">
                     <select class="frequencyInput btn btn-light dropdown-toggle"></select><br>
                     <input type="checkbox" class="scaleOutInput btn btn-light"></input>
                 </td>
@@ -138,10 +138,6 @@
                     <select class="frequencyInput btn btn-light dropdown-toggle"></select><br>
                     <input type="checkbox" class="scaleOutInput btn btn-light"></input>
                 </td>
-                <td id="left500" class="dbCell">
-                    <select class="frequencyInput btn btn-light dropdown-toggle"></select><br>
-                    <input type="checkbox" class="scaleOutInput btn btn-light"></input>
-                </td>
                 <td id="left750" class="dbCell">
                     <select class="frequencyInput btn btn-light dropdown-toggle"></select><br>
                     <input type="checkbox" class="scaleOutInput btn btn-light"></input>
@@ -155,6 +151,10 @@
                     <input type="checkbox" class="scaleOutInput btn btn-light"></input>
                 </td>
                 <td id="left2000" class="dbCell">
+                    <select class="frequencyInput btn btn-light dropdown-toggle"></select><br>
+                    <input type="checkbox" class="scaleOutInput btn btn-light"></input>
+                </td>
+                <td id="left3000" class="dbCell">
                     <select class="frequencyInput btn btn-light dropdown-toggle"></select><br>
                     <input type="checkbox" class="scaleOutInput btn btn-light"></input>
                 </td>
@@ -318,7 +318,7 @@
                         オージオグラムとは
                     </div>
                     <div class="card-body">
-                        オージオグラムは、聴力検査（測定）の結果をグラフで表したものです。聴力検査（測定）では、さまざまなピッチ（音の高さ）の音を聞いて、その音がどれくらい大きな音として聞こえるかを調べます。オージオグラムは、グラフの横軸に「音の高さ」（ヘルツ数）が、縦軸に「音の大きさ」（デシベル）が示されます。グラフの下に行くほど音が大きくなり、右に行くほど高い音を表しています。
+                        オージオグラムは、聴力検査（測定）の結果をグラフで表したものです。聴力検査（測定）では、さまざまな高さ（ピッチ）の音を聞いて、その音がどれくらい大きな音として聞こえるかを調べます。オージオグラムは、グラフの横軸に「音の高さ」（ヘルツ数）が、縦軸に「音の大きさ」（デシベル）が示されます。グラフの下に行くほど音が大きくなり、右に行くほど高い音を表しています。
                     </div>
                 </div>
             </div>
@@ -339,8 +339,8 @@
                     </div>
                     <div class="card-body">
                         1.横の線は音のピッチを示し、低い音から高い音までを表しています。縦の線は音の大きさを示し、静かな音から大きな音までを示しています。<br>
-                        2.グラフ上の「◯」と「×」の記号は、異なる音のピッチで聞こえる一番小さな音を表します。<br>
-                        3.記号が上部に近い場合、聴力は良好です。下にある場合、聴力があまり良くないかもしれません。<br>
+                        2.グラフ上の「◯」と「×」、「［」、「］」の記号は、異なる音のピッチで聞こえる一番小さな音を表します。<br>
+                        3.記号が上部（０）に近い場合、聴力は良好です。下にある場合、聴力があまり良くないかもしれません。<br>
                         4.記号が-10 dBから25dBの範囲にある場合、健聴と言われています。それ以下の場合、聴力が低下している可能性があります。(*)<br>
                         自分のオージオグラムを理解し、必要なら適切な診断を得るためには耳鼻咽喉科医のような専門家を受診しましょう。<br>
                         <a href="https://www.afro.who.int/health-topics/ear-health">(*)WHO Ear Health</a>
@@ -361,12 +361,32 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-6">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        スケールアウトとは
+                    </div>
+                    <div class="card-body">
+                        重度難聴等で、難聴の程度が重く、使用したオージオメーター（音を出す機械）で出せる一番大きな検査音も聞こえなかった場合は「スケールアウト」といい、その音の場所の記号の斜め下に矢印を書きます。また、スケールアウトの場合は線で結びません。
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        Scale Out?
+                    </div>
+                    <div class="card-body">
+                        “Scale Out” means unmeasurable. If you can’t hear even at maximum volume of the sound the machine (audiometer) can generate, it is indicated as “↓” beside “〇“, “×“, “［“, “］“.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.1/dist/chartjs-plugin-annotation.min.js"></script>
-
+    
     <script src="/public/index.js"></script>
 </body>
 </html>
