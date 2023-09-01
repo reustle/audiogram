@@ -1,0 +1,146 @@
+function getTime() {
+    // Returns the curren time
+
+    const date = new Date();
+    const locale = date.toLocaleString();
+    return locale;
+}
+
+async function setUpAudioLevel() {
+    // Set up the connection to the microphone
+
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const audioContext = new AudioContext();
+    const source = audioContext.createMediaStreamSource(stream);
+    const analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
+    source.connect(analyser);
+    return analyser;
+}
+
+async function getAudioLevel(analyser) {
+    // Returns the current audio level
+    
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(dataArray);
+    const dbLevel = dataArray.reduce((acc, val) => acc + val, 0) / dataArray.length;
+    return dbLevel;
+}
+
+function getLocation() {
+    // Returns the current location
+
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+    };
+    function success(pos) {
+        //crd = pos.coords;
+        // console.log(crd);
+        // console.log("Your current position is:");
+        // console.log(`Latitude : ${crd.latitude}`);
+        // console.log(`Longitude: ${crd.longitude}`);
+        // console.log(`More or less ${crd.accuracy} meters.`);
+        
+        if(!pos) {
+            console.log("ERROR: Couldnt get position");
+            return null;
+        }
+        console.log('The location is', pos.coords)
+        return pos.coords;
+    }
+    function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+    navigator.geolocation.getCurrentPosition(success, error, options);
+}
+
+ 
+async function getMicrophoneStream() {
+    let decibelReadings = [];
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const audioContext = new AudioContext();
+    const source = audioContext.createMediaStreamSource(stream);
+    const analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
+  
+    source.connect(analyser);
+  
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    setInterval(() => {
+        analyser.getByteFrequencyData(dataArray);
+        const dbLevel = dataArray.reduce((acc, val) => acc + val, 0) / dataArray.length;
+        //console.log(`Current dB level: ${dbLevel}`);
+        
+        document.getElementById("showDB").innerHTML = dbLevel;
+        
+        let timestamp = getTime(); 
+
+        const options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0,
+        };
+        function success(pos) {
+            //crd = pos.coords;
+            // console.log(crd);
+            // console.log("Your current position is:");
+            // console.log(`Latitude : ${crd.latitude}`);
+            // console.log(`Longitude: ${crd.longitude}`);
+            // console.log(`More or less ${crd.accuracy} meters.`);
+        
+            return pos.coords;
+        }
+        function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+        navigator.geolocation.getCurrentPosition(success, error, options);
+        getTime();
+        //console.log(coords);
+        decibelReadings.push({
+            decibel : dbLevel,
+            timestamp : timestamp,
+            // location : {
+            //     lat : pos.coords.latitude,
+            //     lon : pos.coords.longitude
+            // },
+        })
+        console.log(decibelReadings);
+        // console.log(dbLevel);
+        
+    }, 2*1000); // 2 seconds
+
+}
+    
+  
+
+  
+
+async function main() {
+    // This is what runs when the page loads
+
+    let startBtn = document.getElementById("startBtn");
+    function startBtnClick(){
+        getMicrophoneStream();
+    }
+    startBtn.addEventListener("click", startBtnClick);
+
+
+
+
+
+
+
+
+    // Set up audio analyser
+    // let myAnalyser = await setUpAudioLevel();
+
+    // setInterval(async function() {
+    //     let audioLevel = await getAudioLevel(myAnalyser);
+    //     console.log('Audio level is', audioLevel)
+    // }, 2000)
+
+}
+
+main();
