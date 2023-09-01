@@ -44,8 +44,9 @@ async function getAudioLevel(analyser) {
     
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(dataArray);
-    const dbLevel = dataArray.reduce((acc, val) => acc + val, 0) / dataArray.length;
-    return dbLevel;
+    let dbLevel = dataArray.reduce((acc, val) => acc + val, 0) / dataArray.length;
+    dbLevel = dbLevel + 30;
+    return parseInt(dbLevel);
 }
 
 async function getLocation() {
@@ -104,74 +105,3 @@ async function main() {
 }
 
 main();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-async function getMicrophoneStream() {
-    let decibelReadings = [];
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const audioContext = new AudioContext();
-    const source = audioContext.createMediaStreamSource(stream);
-    const analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
-  
-    source.connect(analyser);
-  
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    setInterval(() => {
-        analyser.getByteFrequencyData(dataArray);
-        const dbLevel = dataArray.reduce((acc, val) => acc + val, 0) / dataArray.length;
-        //console.log(`Current dB level: ${dbLevel}`);
-        
-        document.getElementById("showDB").innerHTML = dbLevel;
-        
-        let timestamp = getTime(); 
-
-        const options = {
-            enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 0,
-        };
-        function success(pos) {
-            //crd = pos.coords;
-            // console.log(crd);
-            // console.log("Your current position is:");
-            // console.log(`Latitude : ${crd.latitude}`);
-            // console.log(`Longitude: ${crd.longitude}`);
-            // console.log(`More or less ${crd.accuracy} meters.`);
-        
-            return pos.coords;
-        }
-        function error(err) {
-            console.warn(`ERROR(${err.code}): ${err.message}`);
-        }
-        navigator.geolocation.getCurrentPosition(success, error, options);
-        getTime();
-        //console.log(coords);
-        decibelReadings.push({
-            decibel : dbLevel,
-            timestamp : timestamp,
-            // location : {
-            //     lat : pos.coords.latitude,
-            //     lon : pos.coords.longitude
-            // },
-        })
-        console.log(decibelReadings);
-        // console.log(dbLevel);
-        
-    }, 2*1000); // 2 seconds
-
-}
