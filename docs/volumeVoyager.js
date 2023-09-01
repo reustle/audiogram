@@ -85,15 +85,20 @@ async function main() {
 
     // Set up audio analyser
     let audioAnalyser = await setUpAudioLevel();
+    let readingsList = [];
+    let buttonClicked = false;
 
-    let startBtn = document.getElementById("startBtn");
     async function startBtnClick() {
+        if (buttonClicked === true) { return; }
+        buttonClicked = true;
 
-        setInterval(function() {
-            createReading(audioAnalyser);
+        setInterval(async function() {
+            let reading = await createReading(audioAnalyser);
+            readingsList.push(reading);
         }, 2*1000);
 
     }
+    let startBtn = document.getElementById("startBtn");
     startBtn.addEventListener("click", startBtnClick);
 
 }
