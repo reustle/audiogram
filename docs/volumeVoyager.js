@@ -6,6 +6,22 @@ function getTime() {
     return locale;
 }
 
+function getCurrentPositionAsync(options) {
+    // Helper function to make getCurrentPosition async/await friendly
+
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                resolve(position);
+            },
+            (error) => {
+                reject(error);
+            },
+            options
+        );
+    });
+}
+
 async function setUpAudioLevel() {
     // Set up the connection to the microphone
 
@@ -27,33 +43,24 @@ async function getAudioLevel(analyser) {
     return dbLevel;
 }
 
-function getLocation() {
+async function getLocation() {
     // Returns the current location
 
-    const options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
-    };
-    function success(pos) {
-        //crd = pos.coords;
-        // console.log(crd);
-        // console.log("Your current position is:");
-        // console.log(`Latitude : ${crd.latitude}`);
-        // console.log(`Longitude: ${crd.longitude}`);
-        // console.log(`More or less ${crd.accuracy} meters.`);
-        
-        if(!pos) {
-            console.log("ERROR: Couldnt get position");
-            return null;
+    try {
+        const options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0,
+        };
+        const position = await getCurrentPositionAsync(options);
+        return {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude
         }
-        console.log('The location is', pos.coords)
-        return pos.coords;
+    } catch (error) {
+        console.error("Error getting location:", error.message);
+        return null;
     }
-    function error(err) {
-        console.warn(`ERROR(${err.code}): ${err.message}`);
-    }
-    navigator.geolocation.getCurrentPosition(success, error, options);
 }
 
  
