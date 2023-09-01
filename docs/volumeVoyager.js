@@ -2,7 +2,7 @@ function getTime() {
     // Returns the curren time
 
     const date = new Date();
-    const locale = date.toLocaleString();
+    const locale = date.toISOString();
     return locale;
 }
 
@@ -36,6 +36,11 @@ async function setUpAudioLevel() {
 
 async function getAudioLevel(analyser) {
     // Returns the current audio level
+
+    if (!analyser) {
+        console.log('ERROR: You forgot to pass analyser');
+        return null;
+    }
     
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(dataArray);
@@ -58,12 +63,58 @@ async function getLocation() {
             lon: position.coords.longitude
         }
     } catch (error) {
-        console.error("Error getting location:", error.message);
+        //console.error("Error getting location:", error.message);
         return null;
     }
 }
 
- 
+async function createReading(audioAnalyser) {
+    // Generate a single reading
+
+    let reading = {
+        timestamp: getTime(),
+        location: await getLocation(),
+        decibel: await getAudioLevel(audioAnalyser),
+    }
+    console.log('Reading:', reading);
+    return reading;
+}
+
+async function main() {
+    // This is what runs when the page loads
+
+    // Set up audio analyser
+    let audioAnalyser = await setUpAudioLevel();
+
+    let startBtn = document.getElementById("startBtn");
+    async function startBtnClick() {
+
+        setInterval(function() {
+            createReading(audioAnalyser);
+        }, 2*1000);
+
+    }
+    startBtn.addEventListener("click", startBtnClick);
+
+}
+
+main();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 async function getMicrophoneStream() {
     let decibelReadings = [];
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -119,35 +170,3 @@ async function getMicrophoneStream() {
     }, 2*1000); // 2 seconds
 
 }
-    
-  
-
-  
-
-async function main() {
-    // This is what runs when the page loads
-
-    let startBtn = document.getElementById("startBtn");
-    function startBtnClick(){
-        getMicrophoneStream();
-    }
-    startBtn.addEventListener("click", startBtnClick);
-
-
-
-
-
-
-
-
-    // Set up audio analyser
-    // let myAnalyser = await setUpAudioLevel();
-
-    // setInterval(async function() {
-    //     let audioLevel = await getAudioLevel(myAnalyser);
-    //     console.log('Audio level is', audioLevel)
-    // }, 2000)
-
-}
-
-main();
