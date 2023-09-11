@@ -80,19 +80,26 @@ async function createReading(audioAnalyser) {
     console.log('Reading:', reading);
     return reading;
 }
-
-function generateReadingAverage(slicedReadingList){
+function generateReadingAverage5(slicedReadingListFive){
     let decibelsSum = 0;
-    let avgDecibel = 0;
+    let avgDecibelFive = 0;
+    
+    for (const item of slicedReadingListFive) {    
+         decibelsSum += item.decibel; 
+    }
+    avgDecibelFive = decibelsSum / 5;
+    return avgDecibelFive;
+}
 
-    for (const item of slicedReadingList) {
-         console.log(item.decibel);
-         decibelsSum += item.decibel;  
-      }
+function generateReadingAverage10(slicedReadingListTen){
+    let decibelsSumTen = 0;
+    let avgDecibelTen = 0;
 
-    avgDecibel = decibelsSum / 10;
-    console.log("decibel's Sum " + decibelsSum);
-    console.log("decibel's avg " + avgDecibel);
+    for (const item of slicedReadingListTen) {
+         decibelsSumTen += item.decibel;  
+    }
+    avgDecibelTen = decibelsSumTen / 10;
+    return avgDecibelTen;
 }
 
 // async function getAudioLevel2(){
@@ -109,6 +116,58 @@ function generateReadingAverage(slicedReadingList){
 //     });
 // }
 
+function map(){
+
+    L.mapbox.accessToken = 'pk.eyJ1IjoicGlwcGktaW0tZmluZSIsImEiOiJjbG1oYzB6MngyZ2Z6M2pvc2dramdyaHlvIn0.bG19jebzMWsgeyvW3o5mCA';
+        
+    var mapboxTiles = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=' + L.mapbox.accessToken, {
+        attribution: '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1
+    });
+
+    var map = L.map('map')
+    .addLayer(mapboxTiles)
+    .setView([35.65834769457418, 139.70165725408242], 15);
+
+    // Create a marker and add it to the map.
+    var marker = L.marker([35.65834769457418, 139.70165725408242], {
+        icon: L.mapbox.marker.icon({
+        'marker-color': '#f86767'
+        })
+    }).addTo(map);
+    var marker = L.marker([35.67497245075575, 139.69060972524682], {
+        icon: L.mapbox.marker.icon({
+        'marker-color': '#f86767'
+        })
+    }).addTo(map);
+
+    //turf.js
+    var point1 = turf.point([35.67497245075575, 139.69060972524682]);
+    var point2 = turf.point([35.65834769457418, 139.70165725408242]);
+    var distance = turf.distance(point1, point2);
+
+    console.log("Distance between points:", distance, "kilometers");
+
+
+    // var markers = new L.MarkerClusterGroup();
+
+    // for (var i = 0; i < addressPoints.length; i++) {
+    //     var a = addressPoints[i];
+    //     var title = a[2];
+    //     var marker = L.marker(new L.LatLng(a[0], a[1]), {
+    //         icon: L.mapbox.marker.icon({'marker-symbol': 'post', 'marker-color': '0044FF'}),
+    //         title: title
+    //     });
+    //     marker.bindPopup(title);
+    //     markers.addLayer(marker);
+    // }
+
+    // map.addLayer(markers);
+    
+}
+
+
 async function main() {
     // This is what runs when the page loads
 
@@ -119,7 +178,7 @@ async function main() {
     let buttonClicked = false;
     // Variable to store the interval ID
     let intervalId ;
-
+    map();
     async function startBtnClick() {
         if (buttonClicked === true) { return; }
         buttonClicked = true;
@@ -133,11 +192,17 @@ async function main() {
             let currentDB =document.getElementById("showDB");
             currentDB.innerHTML = reading.decibel;
 
-
+            if(readingsList.length % 5 === 0) {
+                console.log('5 seconds! ITS TIME ')
+                let readingAverage5 = generateReadingAverage5(readingsList.slice(-5));
+                let DBPer5 =document.getElementById("showDBPer5");
+                DBPer5.innerHTML = readingAverage5;
+            }
             if(readingsList.length % 10 === 0) {
-                console.log('ITS TIME')
-                let readingAverage = generateReadingAverage(readingsList.slice(-10));
-                console.log(readingAverage)
+                console.log('10 seconds! ITS TIME')
+                let readingAverage10 = generateReadingAverage10(readingsList.slice(-10));
+                let DBPer10 =document.getElementById("showDBPer10");
+                DBPer10.innerHTML = readingAverage10;
 
                 // readingsAvgList.push(generateReadingAverage(readingsList.slice(-10)))
                 //avg location & decibels , latest time
@@ -151,6 +216,7 @@ async function main() {
             intervalId = null; // Reset the interval ID
             console.log("Function stopped.");
         }
+            buttonClicked = false;
     }
 
     let startBtn = document.getElementById("startBtn");
