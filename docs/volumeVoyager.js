@@ -125,6 +125,10 @@ function map(){
         tileSize: 512,
         zoomOffset: -1
     });
+    let currenLocaton = getLocation();
+    console.log(currenLocaton);
+
+    console.log(readingsList);
 
     var map = L.map('map')
     .addLayer(mapboxTiles)
@@ -167,13 +171,12 @@ function map(){
     
 }
 
-
+let readingsList = [];
 async function main() {
     // This is what runs when the page loads
 
     // Set up audio analyser
     let audioAnalyser = await setUpAudioLevel();
-    let readingsList = [];
     let readingsAvgList = [];
     let buttonClicked = false;
     // Variable to store the interval ID
