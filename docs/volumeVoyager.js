@@ -81,27 +81,82 @@ async function createReading(audioAnalyser) {
     return reading;
 }
 
+function generateReadingAverage(slicedReadingList){
+    let decibelsSum = 0;
+    let avgDecibel = 0;
+
+    for (const item of slicedReadingList) {
+         console.log(item.decibel);
+         decibelsSum += item.decibel;  
+      }
+
+    avgDecibel = decibelsSum / 10;
+    console.log("decibel's Sum " + decibelsSum);
+    console.log("decibel's avg " + avgDecibel);
+}
+
+// async function getAudioLevel2(){
+//     const meter = new Tone.Meter();
+//     const mic = new Tone.UserMedia().connect(meter);
+//     mic.open().then(() => {
+//         // promise resolves when input is available
+//         console.log("mic open");
+//         // print the incoming mic levels in decibels
+//         setInterval(() => console.log("getAudioLevel2(): " + meter.getValue()), 2*1000);
+//     }).catch(e => {
+//     // promise is rejected when the user doesn't have or allow mic access
+//     console.log("mic not open");
+//     });
+// }
+
 async function main() {
     // This is what runs when the page loads
 
     // Set up audio analyser
     let audioAnalyser = await setUpAudioLevel();
     let readingsList = [];
+    let readingsAvgList = [];
     let buttonClicked = false;
+    // Variable to store the interval ID
+    let intervalId ;
 
     async function startBtnClick() {
         if (buttonClicked === true) { return; }
         buttonClicked = true;
+        //getAudioLevel2();
 
-        setInterval(async function() {
+        intervalId = setInterval(async function() {
             let reading = await createReading(audioAnalyser);
             readingsList.push(reading);
-        }, 2*1000);
+            console.log(readingsList);
+            //show the date
+            let currentDB =document.getElementById("showDB");
+            currentDB.innerHTML = reading.decibel;
 
+
+            if(readingsList.length % 10 === 0) {
+                console.log('ITS TIME')
+                let readingAverage = generateReadingAverage(readingsList.slice(-10));
+                console.log(readingAverage)
+
+                // readingsAvgList.push(generateReadingAverage(readingsList.slice(-10)))
+                //avg location & decibels , latest time
+            }
+        }, 2*1000);
     }
+
+    function stopBtnClick(){
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null; // Reset the interval ID
+            console.log("Function stopped.");
+        }
+    }
+
     let startBtn = document.getElementById("startBtn");
     startBtn.addEventListener("click", startBtnClick);
-
+    let stopBtn = document.getElementById("stopBtn");
+    stopBtn.addEventListener("click", stopBtnClick);
 }
 
 main();
