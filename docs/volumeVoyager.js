@@ -116,40 +116,37 @@ function generateReadingAverage10(slicedReadingListTen){
 //     });
 // }
 
-function map(){
+async function createMap(){
 
-    L.mapbox.accessToken = 'pk.eyJ1IjoicGlwcGktaW0tZmluZSIsImEiOiJjbG1oYzB6MngyZ2Z6M2pvc2dramdyaHlvIn0.bG19jebzMWsgeyvW3o5mCA';
-        
-    var mapboxTiles = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=' + L.mapbox.accessToken, {
-        attribution: '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        tileSize: 512,
-        zoomOffset: -1
-    });
-    let currenLocaton = getLocation();
-    console.log(currenLocaton);
+    mapboxgl.accessToken  = 'pk.eyJ1IjoicGlwcGktaW0tZmluZSIsImEiOiJjbG1oYzB6MngyZ2Z6M2pvc2dramdyaHlvIn0.bG19jebzMWsgeyvW3o5mCA';
+    
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        style: 'mapbox://styles/mapbox/streets-v12', // style URL
+        center: [139.70165725408242,35.65834769457418], // starting position [lng, lat]
+        zoom: 15, // starting zoom
+        });
+    
+    
+    let currentLocation = await getLocation()
+    console.log('res', currentLocation);
 
-    console.log(readingsList);
+    
+    // Create a default Marker and add it to the map.
+    const marker1 = new mapboxgl.Marker()
+    .setLngLat([currentLocation.lon, currentLocation.lat])
+    .addTo(map);
 
-    var map = L.map('map')
-    .addLayer(mapboxTiles)
-    .setView([35.65834769457418, 139.70165725408242], 15);
+    map.flyTo({center:[currentLocation.lon, currentLocation.lat]});
 
-    // Create a marker and add it to the map.
-    var marker = L.marker([35.65834769457418, 139.70165725408242], {
-        icon: L.mapbox.marker.icon({
-        'marker-color': '#f86767'
-        })
-    }).addTo(map);
-    var marker = L.marker([35.67497245075575, 139.69060972524682], {
-        icon: L.mapbox.marker.icon({
-        'marker-color': '#f86767'
-        })
-    }).addTo(map);
 
     //turf.js
     var point1 = turf.point([35.67497245075575, 139.69060972524682]);
     var point2 = turf.point([35.65834769457418, 139.70165725408242]);
     var distance = turf.distance(point1, point2);
+
+    
+    // map.setView([currentLocation.lat, currentLocation.lon], 15);
 
     console.log("Distance between points:", distance, "kilometers");
 
@@ -181,7 +178,7 @@ async function main() {
     let buttonClicked = false;
     // Variable to store the interval ID
     let intervalId ;
-    map();
+    await createMap();
     async function startBtnClick() {
         if (buttonClicked === true) { return; }
         buttonClicked = true;
