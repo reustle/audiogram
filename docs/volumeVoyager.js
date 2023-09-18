@@ -1,11 +1,3 @@
-function getTime() {
-    // Returns the curren time
-
-    const date = new Date();
-    const locale = date.toISOString();
-    return locale;
-}
-
 function getCurrentPositionAsync(options) {
     // Helper function to make getCurrentPosition async/await friendly
 
@@ -73,7 +65,7 @@ async function createReading(audioAnalyser) {
     // Generate a single reading
 
     let reading = {
-        timestamp: getTime(),
+        timestamp: new Date(),
         location: await getLocation(),
         decibel: await getAudioLevel(audioAnalyser),
     }
@@ -81,13 +73,13 @@ async function createReading(audioAnalyser) {
     return reading;
 }
 function generateReadingAverage5(slicedReadingListFive){
-    let decibelsSum = 0;
+    let decibelsSumFive = 0;
     let avgDecibelFive = 0;
     
     for (const item of slicedReadingListFive) {    
-         decibelsSum += item.decibel; 
+         decibelsSumFive += item.decibel; 
     }
-    avgDecibelFive = decibelsSum / 5;
+    avgDecibelFive = decibelsSumFive / 5;
     return avgDecibelFive;
 }
 
@@ -101,6 +93,18 @@ function generateReadingAverage10(slicedReadingListTen){
     avgDecibelTen = decibelsSumTen / 10;
     return avgDecibelTen;
 }
+function generateReadingAverage30(slicedReadingListThirty){
+    let decibelsSumThirty = 0;
+    let avgDecibelThirty = 0;
+
+    for (const item of slicedReadingListThirty) {
+         decibelsSumThirty += item.decibel;  
+    }
+    avgDecibelThirty = decibelsSumThirty / 30;
+    return avgDecibelThirty;
+}
+
+
 
 // async function getAudioLevel2(){
 //     const meter = new Tone.Meter();
@@ -120,7 +124,7 @@ async function createMap(){
 
     mapboxgl.accessToken  = 'pk.eyJ1IjoicGlwcGktaW0tZmluZSIsImEiOiJjbG1oYzB6MngyZ2Z6M2pvc2dramdyaHlvIn0.bG19jebzMWsgeyvW3o5mCA';
     
-    const map = new mapboxgl.Map({
+    map = new mapboxgl.Map({
         container: 'map', // container ID
         style: 'mapbox://styles/mapbox/streets-v12', // style URL
         center: [139.70165725408242,35.65834769457418], // starting position [lng, lat]
@@ -131,24 +135,21 @@ async function createMap(){
     let currentLocation = await getLocation()
     console.log('res', currentLocation);
 
+    // create the popup
+    const popup = new mapboxgl.Popup({ offset: 25 }).setText(
+    'Construction on the Washington Monument began in 1848.'
+    );
+    
     
     // Create a default Marker and add it to the map.
-    const marker1 = new mapboxgl.Marker()
-    .setLngLat([currentLocation.lon, currentLocation.lat])
-    .addTo(map);
+    // const marker1 = new mapboxgl.Marker()
+    // .setLngLat([currentLocation.lon, currentLocation.lat])
+    // .setPopup(popup) // sets a popup on this marker
+    // .addTo(map);
 
     map.flyTo({center:[currentLocation.lon, currentLocation.lat]});
 
 
-    //turf.js
-    var point1 = turf.point([35.67497245075575, 139.69060972524682]);
-    var point2 = turf.point([35.65834769457418, 139.70165725408242]);
-    var distance = turf.distance(point1, point2);
-
-    
-    // map.setView([currentLocation.lat, currentLocation.lon], 15);
-
-    console.log("Distance between points:", distance, "kilometers");
 
 
     // var markers = new L.MarkerClusterGroup();
@@ -169,6 +170,10 @@ async function createMap(){
 }
 
 let readingsList = [];
+let last5Readings = [];
+let avgOf30Decibels;
+var map;
+
 async function main() {
     // This is what runs when the page loads
 
@@ -194,20 +199,63 @@ async function main() {
 
             if(readingsList.length % 5 === 0) {
                 console.log('5 seconds! ITS TIME ')
-                let readingAverage5 = generateReadingAverage5(readingsList.slice(-5));
+                last5Readings = readingsList.slice(-5);
+                let avgOf5Decibels = generateReadingAverage5(last5Readings);                
                 let DBPer5 =document.getElementById("showDBPer5");
-                DBPer5.innerHTML = readingAverage5;
+                DBPer5.innerHTML = avgOf5Decibels;
             }
             if(readingsList.length % 10 === 0) {
                 console.log('10 seconds! ITS TIME')
-                let readingAverage10 = generateReadingAverage10(readingsList.slice(-10));
+                let avgOf10Decibels = generateReadingAverage10(readingsList.slice(-10));
                 let DBPer10 =document.getElementById("showDBPer10");
-                DBPer10.innerHTML = readingAverage10;
+                DBPer10.innerHTML = avgOf10Decibels;
 
                 // readingsAvgList.push(generateReadingAverage(readingsList.slice(-10)))
                 //avg location & decibels , latest time
             }
-        }, 2*1000);
+            if(readingsList.length % 30 === 0 ){
+                console.log('30 seconds! ITS TIME')
+                let last30Readings = readingsList.slice(-30);
+                
+                console.log("last30Readings : ", last30Readings)
+                console.log(last30Readings[14])
+                console.log(last30Readings[14].location.lat)
+                let lastTimestamp = last30Readings[29].timestamp.toLocaleString();
+                
+                let markerColor;
+                let middleLocationOfLast30 = last30Readings[14].location;
+                avgOf30Decibels = generateReadingAverage30(last30Readings);
+                console.log("30sec func", map);
+                if(avgOf30Decibels < 30 ){
+                    markerColor = '#10ad4d'
+                }else if(avgOf30Decibels >= 30 && avgOf30Decibels < 60){
+                    markerColor = '#6eb647'
+                }else if(avgOf30Decibels >= 60 && avgOf30Decibels < 70){
+                    markerColor = '#a9c43d'
+                }else if(avgOf30Decibels >= 70 && avgOf30Decibels < 80){
+                    markerColor = '#fcde03'
+                }else if(avgOf30Decibels >= 80 && avgOf30Decibels < 99){
+                    markerColor = '#fdbf0d'
+                }else if(avgOf30Decibels >= 99 && avgOf30Decibels < 130){
+                    markerColor = '#f74425'
+                }else{
+                    markerColor = '#ec1a23'
+                }
+
+                // create the popup
+                let popupText = `
+                    Time: ${lastTimestamp}<br/>
+                    DB: ${(Math.round(avgOf30Decibels*100))/100}
+                `;
+                const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupText);        
+                // Create a default Marker and add it to the map.
+                const newMarker = new mapboxgl.Marker({ color: markerColor })
+                .setLngLat([middleLocationOfLast30.lon, middleLocationOfLast30.lat])
+                .setPopup(popup) // sets a popup on this marker
+                .addTo(map);
+                map.flyTo({center:[middleLocationOfLast30.lon, middleLocationOfLast30.lat]});
+            }
+        }, 0.5*1000);
     }
 
     function stopBtnClick(){
