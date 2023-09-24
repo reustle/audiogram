@@ -14,33 +14,6 @@ function getCurrentPositionAsync(options) {
     });
 }
 
-async function setUpAudioLevel() {
-    // Set up the connection to the microphone
-
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const audioContext = new AudioContext();
-    const source = audioContext.createMediaStreamSource(stream);
-    const analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
-    source.connect(analyser);
-    return analyser;
-}
-
-async function getAudioLevel(analyser) {
-    // Returns the current audio level
-
-    if (!analyser) {
-        console.log('ERROR: You forgot to pass analyser');
-        return null;
-    }
-    
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(dataArray);
-    let dbLevel = dataArray.reduce((acc, val) => acc + val, 0) / dataArray.length;
-    dbLevel = dbLevel + 30;
-    return parseInt(dbLevel);
-}
-
 async function getLocation() {
     // Returns the current location
 
@@ -61,13 +34,13 @@ async function getLocation() {
     }
 }
 
-async function createReading(audioAnalyser) {
+async function createReading() {
     // Generate a single reading
 
     let reading = {
         timestamp: new Date(),
         location: await getLocation(),
-        decibel: await getAudioLevel(audioAnalyser),
+        decibel: await dbMeter.getVolume(),
     }
     console.log('Reading:', reading);
     return reading;
@@ -169,28 +142,56 @@ async function createMap(){
     
 }
 
+function createDBGraph(){
+    const ctx = document.getElementById('decibelChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+} 
+
 let readingsList = [];
 let last5Readings = [];
 let avgOf30Decibels;
 var map;
-
+var dbMeter = new DecibelMonitor();
+    
 async function main() {
     // This is what runs when the page loads
 
-    // Set up audio analyser
-    let audioAnalyser = await setUpAudioLevel();
     let readingsAvgList = [];
     let buttonClicked = false;
     // Variable to store the interval ID
     let intervalId ;
     await createMap();
+
+    createDBGraph();    
+
     async function startBtnClick() {
         if (buttonClicked === true) { return; }
         buttonClicked = true;
         //getAudioLevel2();
+        //connect to Device Mic
+        await dbMeter.connectMic();
+
 
         intervalId = setInterval(async function() {
-            let reading = await createReading(audioAnalyser);
+            let reading = await createReading();
             readingsList.push(reading);
             console.log(readingsList);
             //show the date
@@ -255,7 +256,7 @@ async function main() {
                 .addTo(map);
                 map.flyTo({center:[middleLocationOfLast30.lon, middleLocationOfLast30.lat]});
             }
-        }, 0.5*1000);
+        }, 1*1000);
     }
 
     function stopBtnClick(){
