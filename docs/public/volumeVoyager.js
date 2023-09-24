@@ -93,7 +93,7 @@ async function createMap(){
 
     // create the popup
     const popup = new mapboxgl.Popup({ offset: 25 }).setText(
-    'Construction on the Washington Monument began in 1848.'
+    'Loading'
     );
     
     
@@ -126,7 +126,7 @@ async function createMap(){
 }
 
 function createDBGraph(){
-    const ctx = document.getElementById('decibelChart');
+  const ctx = document.getElementById('decibelChart');
 
   new Chart(ctx, {
     type: 'bar',
@@ -146,116 +146,126 @@ function createDBGraph(){
       }
     }
   });
-} 
+}
+
+function handleButtonClicks() {
+  // Create the click events for the START and STOP buttons
+
+  let buttonClicked = false;
+  // Variable to store the interval ID
+  let intervalId ;
+
+  async function startBtnClick() {
+    if (buttonClicked === true) { return; }
+    buttonClicked = true;
+    //getAudioLevel2();
+    //connect to Device Mic
+    await dbMeter.connectMic();
+
+
+    intervalId = setInterval(async function() {
+        let reading = await createReading();
+        readingsList.push(reading);
+        console.log(readingsList);
+        //show the date
+        let currentDB =document.getElementById("showDB");
+        currentDB.innerHTML = reading.decibel;
+
+        if(readingsList.length % 5 === 0) {
+            // 
+            console.log('5 seconds! ITS TIME ')
+            last5Readings = readingsList.slice(-5);
+            let avgOf5Decibels = generateReadingAverage(last5Readings);                
+            let DBPer5 =document.getElementById("showDBPer5");
+            DBPer5.innerHTML = avgOf5Decibels;
+        }
+        if(readingsList.length % 10 === 0) {
+            console.log('10 seconds! ITS TIME')
+            let avgOf10Decibels = generateReadingAverage(readingsList.slice(-10));
+            let DBPer10 =document.getElementById("showDBPer10");
+            DBPer10.innerHTML = avgOf10Decibels;
+
+            // readingsAvgList.push(generateReadingAverage(readingsList.slice(-10)))
+            //avg location & decibels , latest time
+        }
+        if(readingsList.length % 30 === 0 ){
+            console.log('30 seconds! ITS TIME')
+            let last30Readings = readingsList.slice(-30);
+            
+            console.log("last30Readings : ", last30Readings)
+            console.log(last30Readings[14])
+            console.log(last30Readings[14].location.lat)
+            let lastTimestamp = last30Readings[29].timestamp.toLocaleString();
+            
+            let markerColor;
+            let middleLocationOfLast30 = last30Readings[14].location;
+            avgOf30Decibels = generateReadingAverage(last30Readings);
+            console.log("30sec func", map);
+            if(avgOf30Decibels < 30 ){
+                markerColor = '#10ad4d'
+            }else if(avgOf30Decibels >= 30 && avgOf30Decibels < 60){
+                markerColor = '#6eb647'
+            }else if(avgOf30Decibels >= 60 && avgOf30Decibels < 70){
+                markerColor = '#a9c43d'
+            }else if(avgOf30Decibels >= 70 && avgOf30Decibels < 80){
+                markerColor = '#fcde03'
+            }else if(avgOf30Decibels >= 80 && avgOf30Decibels < 99){
+                markerColor = '#fdbf0d'
+            }else if(avgOf30Decibels >= 99 && avgOf30Decibels < 130){
+                markerColor = '#f74425'
+            }else{
+                markerColor = '#ec1a23'
+            }
+
+            // create the popup
+            let popupText = `
+                Time: ${lastTimestamp}<br/>
+                DB: ${(Math.round(avgOf30Decibels*100))/100}
+            `;
+            const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupText);        
+            // Create a default Marker and add it to the map.
+            const newMarker = new mapboxgl.Marker({ color: markerColor })
+            .setLngLat([middleLocationOfLast30.lon, middleLocationOfLast30.lat])
+            .setPopup(popup) // sets a popup on this marker
+            .addTo(map);
+            map.flyTo({center:[middleLocationOfLast30.lon, middleLocationOfLast30.lat]});
+        }
+    }, 1*1000);
+  }
+
+  function stopBtnClick(){
+      if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null; // Reset the interval ID
+          console.log("Function stopped.");
+      }
+          buttonClicked = false;
+  }
+
+  let startBtn = document.getElementById("startBtn");
+  startBtn.addEventListener("click", startBtnClick);
+
+  let stopBtn = document.getElementById("stopBtn");
+  stopBtn.addEventListener("click", stopBtnClick);
+}
 
 let readingsList = [];
 let last5Readings = [];
 let avgOf30Decibels;
 var map;
 var dbMeter = new DecibelMonitor();
-    
+
+
 async function main() {
     // This is what runs when the page loads
 
-    let readingsAvgList = [];
-    let buttonClicked = false;
-    // Variable to store the interval ID
-    let intervalId ;
+    createDBGraph();
+
     await createMap();
+    
+    handleButtonClicks();
 
-    createDBGraph();    
-
-    async function startBtnClick() {
-        if (buttonClicked === true) { return; }
-        buttonClicked = true;
-        //getAudioLevel2();
-        //connect to Device Mic
-        await dbMeter.connectMic();
-
-
-        intervalId = setInterval(async function() {
-            let reading = await createReading();
-            readingsList.push(reading);
-            console.log(readingsList);
-            //show the date
-            let currentDB =document.getElementById("showDB");
-            currentDB.innerHTML = reading.decibel;
-
-            if(readingsList.length % 5 === 0) {
-                // 
-                console.log('5 seconds! ITS TIME ')
-                last5Readings = readingsList.slice(-5);
-                let avgOf5Decibels = generateReadingAverage(last5Readings);                
-                let DBPer5 =document.getElementById("showDBPer5");
-                DBPer5.innerHTML = avgOf5Decibels;
-            }
-            if(readingsList.length % 10 === 0) {
-                console.log('10 seconds! ITS TIME')
-                let avgOf10Decibels = generateReadingAverage(readingsList.slice(-10));
-                let DBPer10 =document.getElementById("showDBPer10");
-                DBPer10.innerHTML = avgOf10Decibels;
-
-                // readingsAvgList.push(generateReadingAverage(readingsList.slice(-10)))
-                //avg location & decibels , latest time
-            }
-            if(readingsList.length % 30 === 0 ){
-                console.log('30 seconds! ITS TIME')
-                let last30Readings = readingsList.slice(-30);
-                
-                console.log("last30Readings : ", last30Readings)
-                console.log(last30Readings[14])
-                console.log(last30Readings[14].location.lat)
-                let lastTimestamp = last30Readings[29].timestamp.toLocaleString();
-                
-                let markerColor;
-                let middleLocationOfLast30 = last30Readings[14].location;
-                avgOf30Decibels = generateReadingAverage(last30Readings);
-                console.log("30sec func", map);
-                if(avgOf30Decibels < 30 ){
-                    markerColor = '#10ad4d'
-                }else if(avgOf30Decibels >= 30 && avgOf30Decibels < 60){
-                    markerColor = '#6eb647'
-                }else if(avgOf30Decibels >= 60 && avgOf30Decibels < 70){
-                    markerColor = '#a9c43d'
-                }else if(avgOf30Decibels >= 70 && avgOf30Decibels < 80){
-                    markerColor = '#fcde03'
-                }else if(avgOf30Decibels >= 80 && avgOf30Decibels < 99){
-                    markerColor = '#fdbf0d'
-                }else if(avgOf30Decibels >= 99 && avgOf30Decibels < 130){
-                    markerColor = '#f74425'
-                }else{
-                    markerColor = '#ec1a23'
-                }
-
-                // create the popup
-                let popupText = `
-                    Time: ${lastTimestamp}<br/>
-                    DB: ${(Math.round(avgOf30Decibels*100))/100}
-                `;
-                const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupText);        
-                // Create a default Marker and add it to the map.
-                const newMarker = new mapboxgl.Marker({ color: markerColor })
-                .setLngLat([middleLocationOfLast30.lon, middleLocationOfLast30.lat])
-                .setPopup(popup) // sets a popup on this marker
-                .addTo(map);
-                map.flyTo({center:[middleLocationOfLast30.lon, middleLocationOfLast30.lat]});
-            }
-        }, 1*1000);
-    }
-
-    function stopBtnClick(){
-        if (intervalId) {
-            clearInterval(intervalId);
-            intervalId = null; // Reset the interval ID
-            console.log("Function stopped.");
-        }
-            buttonClicked = false;
-    }
-
-    let startBtn = document.getElementById("startBtn");
-    startBtn.addEventListener("click", startBtnClick);
-    let stopBtn = document.getElementById("stopBtn");
-    stopBtn.addEventListener("click", stopBtnClick);
+    
 }
 
 main();
