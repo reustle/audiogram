@@ -45,39 +45,22 @@ async function createReading() {
     console.log('Reading:', reading);
     return reading;
 }
-function generateReadingAverage5(slicedReadingListFive){
-    let decibelsSumFive = 0;
-    let avgDecibelFive = 0;
+
+
+function generateReadingAverage(slicedReadingList){
+    let decibelsSum = 0;
+    let avgDecibel = 0;
+
+    if(!slicedReadingList.length) {
+        return 0;
+    }
     
-    for (const item of slicedReadingListFive) {    
-         decibelsSumFive += item.decibel; 
+    for (const item of slicedReadingList) {    
+         decibelsSum += item.decibel; 
     }
-    avgDecibelFive = decibelsSumFive / 5;
-    return avgDecibelFive;
+    avgDecibel = decibelsSum / slicedReadingList.length;
+    return avgDecibel;
 }
-
-function generateReadingAverage10(slicedReadingListTen){
-    let decibelsSumTen = 0;
-    let avgDecibelTen = 0;
-
-    for (const item of slicedReadingListTen) {
-         decibelsSumTen += item.decibel;  
-    }
-    avgDecibelTen = decibelsSumTen / 10;
-    return avgDecibelTen;
-}
-function generateReadingAverage30(slicedReadingListThirty){
-    let decibelsSumThirty = 0;
-    let avgDecibelThirty = 0;
-
-    for (const item of slicedReadingListThirty) {
-         decibelsSumThirty += item.decibel;  
-    }
-    avgDecibelThirty = decibelsSumThirty / 30;
-    return avgDecibelThirty;
-}
-
-
 
 // async function getAudioLevel2(){
 //     const meter = new Tone.Meter();
@@ -199,15 +182,16 @@ async function main() {
             currentDB.innerHTML = reading.decibel;
 
             if(readingsList.length % 5 === 0) {
+                // 
                 console.log('5 seconds! ITS TIME ')
                 last5Readings = readingsList.slice(-5);
-                let avgOf5Decibels = generateReadingAverage5(last5Readings);                
+                let avgOf5Decibels = generateReadingAverage(last5Readings);                
                 let DBPer5 =document.getElementById("showDBPer5");
                 DBPer5.innerHTML = avgOf5Decibels;
             }
             if(readingsList.length % 10 === 0) {
                 console.log('10 seconds! ITS TIME')
-                let avgOf10Decibels = generateReadingAverage10(readingsList.slice(-10));
+                let avgOf10Decibels = generateReadingAverage(readingsList.slice(-10));
                 let DBPer10 =document.getElementById("showDBPer10");
                 DBPer10.innerHTML = avgOf10Decibels;
 
@@ -225,7 +209,7 @@ async function main() {
                 
                 let markerColor;
                 let middleLocationOfLast30 = last30Readings[14].location;
-                avgOf30Decibels = generateReadingAverage30(last30Readings);
+                avgOf30Decibels = generateReadingAverage(last30Readings);
                 console.log("30sec func", map);
                 if(avgOf30Decibels < 30 ){
                     markerColor = '#10ad4d'
