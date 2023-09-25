@@ -42,7 +42,7 @@
     /* position: relative; */
     margin: auto;
     height: 200px;
-    width: 250px;
+    width: 100%;
 }
 @media print{
     .print_none{

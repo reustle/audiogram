@@ -1,5 +1,6 @@
 let readingsList = [];
 var map;
+var historyChart;
 var dbMeter = new DecibelMonitor();
 
 
@@ -130,26 +131,62 @@ async function createMap(){
 }
 
 function createDBGraph(){
-  const ctx = document.getElementById('decibelChart');
+  const ctx = document.getElementById('decibelChart').getContext("2d");
+  var data = {
+    labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"],
+    datasets: [
+      {
+        label: 'Right',
+        data: [],
+        borderColor: 'rgba(255, 100, 100, 1)',
+        //If true, lines will be drawn between points with no or null data.
+        spanGaps: true,
+        showLine: true,
+        pointStyle: false,
+        borderWidth: 1,
+      },
+    ]
+  };
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
-    },
+  historyChart = new Chart(ctx, {
+    type: 'line',
+    data: data,
     options: {
-      scales: {
-        y: {
-          beginAtZero: true
+      plugins:{
+        legend:{
+            display:false,
+            position:'top',
+            labels:{
+                usePointStyle: true,
+            }
         }
-      }
-    }
-  });
+      },
+      scales: {
+        x: {
+            offset :true,
+            title:{
+                display: true,
+                text: 'Time(s)',
+
+            }                        
+        },
+        y: {
+            offset :true,
+            title: {
+                display: true,
+                text: 'Noise Volume (dB)'
+            },
+            //top 0 -> bottom 120
+            reverse: false,
+            min: -10,
+            max: 120,
+            ticks: {
+                stepSize: 10,
+                autoSkip: true
+            }
+        },
+      },
+  }});
 }
 
 async function decibelCheckLoop() {
@@ -158,13 +195,22 @@ async function decibelCheckLoop() {
   let reading = await createReading();
   readingsList.push(reading);
 
+  //get all dates
+  var chartData = historyChart.data.datasets[0].data;
+  chartData.push(reading.decibel);
+  // If the length is over 30, remove the first item
+  if (chartData.length == 30) {
+    chartData.shift();
+  }
+  historyChart.data.datasets[0].data = chartData;
+  historyChart.update();
+
   console.log('decibelCheckLoop list', { list: readingsList });
   
   // Show the data
-
   document.getElementById("showDB").innerHTML = reading.decibel;
 
-  if(readingsList.length % 5 === 0) {
+  if (readingsList.length % 5 === 0) {
     // There have been a multiple of 5 readings
 
     console.log('5 seconds! ITS TIME ')
@@ -173,16 +219,19 @@ async function decibelCheckLoop() {
     let DBPer5 =document.getElementById("showDBPer5");
     DBPer5.innerHTML = avgOf5Decibels;
   }
-  if(readingsList.length % 10 === 0) {
+
+  if (readingsList.length % 10 === 0) {
+    // There have been a multiple of 10 readings
+
     console.log('10 seconds! ITS TIME')
     let avgOf10Decibels = generateReadingAverage(readingsList.slice(-10));
     let DBPer10 =document.getElementById("showDBPer10");
     DBPer10.innerHTML = avgOf10Decibels;
-
-    // readingsAvgList.push(generateReadingAverage(readingsList.slice(-10)))
-    //avg location & decibels , latest time
   }
-  if(readingsList.length % 30 === 0 ){
+
+  if (readingsList.length % 30 === 0 ) {
+    // There have been a multiple of 30 readings
+
     console.log('30 seconds! ITS TIME')
     let last30Readings = readingsList.slice(-30);
     
