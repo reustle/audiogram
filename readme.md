@@ -9,5 +9,5 @@ cd docs/;
 ```
 
 ### Tasks
-- make chart wider
-- start function without waiting zoom 
+- keep data(share / private)
+- popup

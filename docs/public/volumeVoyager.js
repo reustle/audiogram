@@ -66,21 +66,6 @@ function generateReadingAverage(slicedReadingList){
     avgDecibel = decibelsSum / slicedReadingList.length;
     return avgDecibel;
 }
-
-// async function getAudioLevel2(){
-//     const meter = new Tone.Meter();
-//     const mic = new Tone.UserMedia().connect(meter);
-//     mic.open().then(() => {
-//         // promise resolves when input is available
-//         console.log("mic open");
-//         // print the incoming mic levels in decibels
-//         setInterval(() => console.log("getAudioLevel2(): " + meter.getValue()), 2*1000);
-//     }).catch(e => {
-//     // promise is rejected when the user doesn't have or allow mic access
-//     console.log("mic not open");
-//     });
-// }
-
 async function createMap(){
 
     mapboxgl.accessToken  = 'pk.eyJ1IjoicGlwcGktaW0tZmluZSIsImEiOiJjbG1oYzB6MngyZ2Z6M2pvc2dramdyaHlvIn0.bG19jebzMWsgeyvW3o5mCA';
@@ -263,7 +248,7 @@ async function decibelCheckLoop() {
     // create the popup
     let popupText = `
         Time: ${lastTimestamp}<br/>
-        DB: ${(Math.round(avgOf30Decibels*100))/100}
+        Decibel: ${(Math.round(avgOf30Decibels*100))/100}
     `;
     const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupText);        
     // Create a default Marker and add it to the map.
@@ -276,8 +261,11 @@ async function decibelCheckLoop() {
 }
 
 function handleButtonClicks() {
-  // Create the click events for the START and STOP buttons
 
+  let startBtn = document.getElementById("startBtn");
+  startBtn.addEventListener("click", toggleStartStop);
+
+  // Create the click events for the START and STOP buttons
   let isStarted = false;
   // Variable to store the interval ID
   let intervalId ;
@@ -287,12 +275,10 @@ function handleButtonClicks() {
       return;
     }
 
-    //getAudioLevel2();
     //connect to Device Mic
     await dbMeter.connectMic();
     intervalId = setInterval(decibelCheckLoop, 1*1000); // Every 1 second
-
-    isStarted = true;
+    isStarted = true;    
   }
 
   function stopBtnClick(){
@@ -304,11 +290,15 @@ function handleButtonClicks() {
     isStarted = false;
   }
 
-  let startBtn = document.getElementById("startBtn");
-  startBtn.addEventListener("click", startBtnClick);
-
-  let stopBtn = document.getElementById("stopBtn");
-  stopBtn.addEventListener("click", stopBtnClick);
+  function toggleStartStop(){
+    if(isStarted){
+      stopBtnClick();
+      startBtn.value = "START";
+    }else{
+      startBtnClick();
+      startBtn.value = "STOP";
+    }
+  } 
 }
 
 
@@ -317,11 +307,9 @@ async function main() {
 
     createDBGraph();
 
-    await createMap();
-
     handleButtonClicks();
 
-    
+    await createMap();    
 }
 
 main();
