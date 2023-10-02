@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="オージオグラムを作成するためのサイトです。The website for making an audiogram."/>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+    <meta name="description" content="Decibel Meter and Map the values."/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="/public/style.css">
@@ -20,6 +21,32 @@
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
 
+    <!-- Firebase -->
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js";
+      import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+      import { getFirestore } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyCT7g7ba8dx-HQBid8wI4l9f8yt873zWPs",
+        authDomain: "volumevoyager.firebaseapp.com",
+        projectId: "volumevoyager",
+        storageBucket: "volumevoyager.appspot.com",
+        messagingSenderId: "113079503090",
+        appId: "1:113079503090:web:cec9d5756d26a92be8e86b",
+        measurementId: "G-V1NP8GFW9Y"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
 
 </head>
 
@@ -53,19 +80,20 @@
     <!-- END Navbar -->
     <div class="container-md">
         <div class="row row1">
-            <div class="col-sm-6 col-md-11">
-                <h1>Decibel Meter</h1>
+            <div class="col-sm-6 col-md-11 my-2">
+                <h1>Volume Voyager</h1>
+                <h4>Decibel Meter and add the decibels in map.</h4>
             </div>       
         </div>
-        <div class="row row1">
+        <div class="row row1 gy-5">
             <div class="col-sm-12 col-md-4">
-                <input id="startBtn" type="button" value="START" id="startBtn">
+                <input id="startBtn" type="button" value="START" id="startBtn" class="btn btn-outline-secondary btn-lg m-2">
             
-                <div id="showDB" style="font-size:20pt">--</div>
+                <div id="showDB" style="font-size:20pt" class="m-2">--</div>
                 <h6>current dB / per second</h6>
-                <div id="showDBPer5" style="font-size:20pt">--</div>
+                <div id="showDBPer5" style="font-size:20pt" class="m-2">--</div>
                 <h6>current dB / per 5 seconds</h6>
-                <div id="showDBPer10" style="font-size:20pt">--</div>
+                <div id="showDBPer10" style="font-size:20pt" class="m-2">--</div>
                 <h6>current dB / per 10 seconds</h6>
                 <div class="decibelChart-container" >
                   <canvas class="decibelChart" id="decibelChart" width="200px" style="display: block; box-sizing: border-box; height: 200px; width: 160px;"></canvas>
