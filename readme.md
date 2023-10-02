@@ -9,5 +9,6 @@ cd docs/;
 ```
 
 ### Tasks
-- keep data(share / private)
-- popup
+- keep data(share / private)　firebase
+- popup 
+- map size for mobile  
